@@ -1,0 +1,31 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    /* Memberikan tinggi penuh untuk body */
+    display: flex;
+    flex-direction: column;
+}
+
+#homepic.hero-home {
+    background-image: url(/static/sq-lim-k4vhuUHv08o-unsplash.jpg);
+    background-size: cover;
+    background-position: center;
+    flex: 1;
+    /* Membuat gambar fleksibel untuk mengisi ruang kosong */
+}
+
+#homepic.hero-home img {
+    display: none;
+}
+
+footer {
+    flex-shrink: 0;
+    /* Menetapkan agar footer tidak menyusut saat kontennya tidak cukup */
+}
+
+.copyright {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 20px 0;
+    text-align: center;
+}
