@@ -1,0 +1,68 @@
+        body {
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            /* Memberikan tinggi penuh untuk body */
+            display: flex;
+            flex-direction: column;
+        }
+
+        #homepic.hero-home {
+            background-image: url(/static/bg.jpg);
+            background-size: cover;
+            background-position: center;
+            flex: 1;
+            /* Membuat gambar fleksibel untuk mengisi ruang kosong */
+        }
+
+        #homepic.hero-home img {
+            display: none;
+        }
+
+        footer {
+            flex-shrink: 0;
+            /* Menetapkan agar footer tidak menyusut saat kontennya tidak cukup */
+        }
+
+        .copyright {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Gaya umum untuk menu */
+        .navbar-nav .nav-link {
+            color: #000;
+            /* Warna teks default */
+            transition: color 0.3s ease;
+            /* Efek transisi warna */
+        }
+
+        /* Gaya menu yang sedang aktif */
+        .navbar-nav .nav-link:active,
+        .navbar-nav .nav-link:focus {
+            color: #007bff;
+            /* Warna teks saat aktif atau dalam fokus */
+            font-weight: bold;
+            /* Memberikan teks yang sedang aktif berat lebih */
+        }
+
+        /* Gaya untuk judul "Artikel Terkini" */
+        .judulkategori {
+            color: #007bff;
+            /* Warna teks biru */
+        }
+
+        /* Garis bawah pada judul "Artikel Terkini" */
+        .judulkategori::after {
+            content: "";
+            display: block;
+            width: 40px;
+            /* Panjang garis bawah */
+            height: 2px;
+            /* Ketebalan garis bawah */
+            background-color: #007bff;
+            /* Warna garis bawah */
+            margin: 8px auto;
+            /* Jarak dari teks */
+        }
