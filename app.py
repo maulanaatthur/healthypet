@@ -11,6 +11,14 @@ def home():
         # Handle POST Request here
         return render_template('index.html')
     return render_template('index.html')
+    
+
+@app.route('/produk',methods=['GET' , 'POST'])
+def produk():
+    if request.method=='POST':
+        # Handle POST Request here
+        return render_template('pesan_obat.html')
+    return render_template('pesan_obat.html')
 
 @app.route("/about")
 def about():
