@@ -20,6 +20,14 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
+@app.route("/mulaikonsultasi")
+def konsultasi():
+    return render_template('artikel.html')
+
 @app.route('/pesanan',methods=['GET' , 'POST'])
 def pesanan():
     if request.method=='POST':
