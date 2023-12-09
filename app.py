@@ -32,6 +32,13 @@ def konsultasi():
 def pesanan():
     if request.method=='POST':
         # Handle POST Request here
+        return render_template('riwayat_obat.html')
+    return render_template('riwayat_obat.html')
+
+@app.route('/detail',methods=['GET' , 'POST'])
+def detail():
+    if request.method=='POST':
+        # Handle POST Request here
         return render_template('detail_pesan_obat.html')
     return render_template('detail_pesan_obat.html')
 
