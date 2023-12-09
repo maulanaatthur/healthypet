@@ -20,6 +20,13 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
+@app.route('/pesanan',methods=['GET' , 'POST'])
+def pesanan():
+    if request.method=='POST':
+        # Handle POST Request here
+        return render_template('detail_pesan_obat.html')
+    return render_template('detail_pesan_obat.html')
+
 if __name__ == '__main__':
     #DEBUG is SET to TRUE. CHANGE FOR PROD
     app.run('0.0.0.0',port=5000,debug=True)
