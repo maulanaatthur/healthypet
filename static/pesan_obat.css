@@ -1,0 +1,137 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    /* Memberikan tinggi penuh untuk body */
+    display: flex;
+    flex-direction: column;
+}
+
+#homepic.hero-home {
+    background-image: url(/static/bg.jpg);
+    background-size: cover;
+    background-position: center;
+    flex: 1;
+    /* Membuat gambar fleksibel untuk mengisi ruang kosong */
+}
+
+#homepic.hero-home img {
+    display: none;
+}
+
+.copyright {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Gaya umum untuk menu */
+.navbar-nav .nav-link {
+    color: #000;
+    /* Warna teks default */
+    transition: color 0.3s ease;
+    /* Efek transisi warna */
+}
+
+/* Gaya menu yang sedang aktif */
+.navbar-nav .nav-link:active,
+.navbar-nav .nav-link:focus {
+    color: #007bff;
+    /* Warna teks saat aktif atau dalam fokus */
+    font-weight: bold;
+    /* Memberikan teks yang sedang aktif berat lebih */
+}
+
+/* Gaya untuk judul "Artikel Terkini" */
+.judulkategori {
+    color: #007bff;
+    /* Warna teks biru */
+}
+
+/* Garis bawah pada judul "Artikel Terkini" */
+.judulkategori::after {
+    content: "";
+    display: block;
+    width: 40px;
+    /* Panjang garis bawah */
+    height: 2px;
+    /* Ketebalan garis bawah */
+    background-color: #007bff;
+    /* Warna garis bawah */
+    margin: 8px auto;
+    /* Jarak dari teks */
+}
+
+/* Gaya untuk card pada artikel terkini */
+.card {
+    transition: transform 0.3s ease;
+    /* Efek transisi saat hover */
+}
+
+.card:hover {
+    transform: scale(1.05);
+    /* Memperbesar card saat hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Efek bayangan saat hover */
+}
+
+.card img {
+    max-height: 200px;
+    /* Batasan tinggi gambar */
+    object-fit: cover;
+    /* Menyesuaikan gambar agar memenuhi ukuran container */
+}
+
+.card-title {
+    font-size: 1.25rem;
+    /* Ukuran teks judul */
+    margin-bottom: 0.75rem;
+    /* Jarak bawah teks judul */
+}
+
+.card-text {
+    font-size: 0.9rem;
+    /* Ukuran teks deskripsi */
+    color: #555;
+    /* Warna teks deskripsi */
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    /* Warna latar belakang footer */
+    border-top: 1px solid #e9ecef;
+    /* Garis atas pada footer */
+    padding: 0.75rem;
+    /* Ruang padding pada footer */
+}
+
+.card-footer a {
+    color: white;
+    /* Warna teks link pada footer */
+    text-decoration: none;
+    /* Menghilangkan garis bawah pada link */
+    font-weight: bold;
+    /* Memberikan berat lebih pada teks link */
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+    /* Garis bawah saat hover pada link */
+}
+
+/* Gaya untuk card pada artikel terkini */
+.artikel_area {
+    margin-bottom: 20px;
+    /* Menambahkan margin ke bagian bawah card artikel terkini */
+}
+
+.footer {
+    margin-top: 20px;
+    flex-shrink: 0;
+    margin-top: 20px;
+    /* Menambahkan margin ke atas footer */
+    margin-bottom: 20px;
+    /* Menambahkan margin ke bawah footer */
+
+    /* Menambahkan margin ke bagian atas footer */
+}

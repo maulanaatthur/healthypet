@@ -1,0 +1,48 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    /* Memberikan tinggi penuh untuk body */
+    display: flex;
+    flex-direction: column;
+}
+
+#qr {
+    width: 100%; 
+    max-width: 400px;
+
+}
+
+#kategori {
+    width:10%; 
+    background-color: #c3e2f0;
+}
+
+.judulkategori {
+    color: #007bff;
+    /* Warna teks biru */
+}
+
+/* Garis bawah pada judul "Artikel Terkini" */
+.judulkategori::after {
+    content: "";
+    display: block;
+    width: 40px;
+    /* Panjang garis bawah */
+    height: 2px;
+    /* Ketebalan garis bawah */
+    background-color: #007bff;
+    /* Warna garis bawah */
+    margin: 8px auto;
+    /* Jarak dari teks */
+}
+
+.footer {
+    margin-top: 20px;
+    flex-shrink: 0;
+    margin-top: 20px;
+    /* Menambahkan margin ke atas footer */
+    margin-bottom: 20px;
+    /* Menambahkan margin ke bawah footer */
+
+    /* Menambahkan margin ke bagian atas footer */
+}
