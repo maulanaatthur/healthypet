@@ -1,6 +1,22 @@
-from flask import Flask,redirect,url_for,render_template,request
-from pymongo import MongoClient
 
+from pymongo import MongoClient
+import jwt
+import datetime
+import hashlib
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta
+
+
+app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["UPLOAD_FOLDER"] = "./static/profile_pics"
+
+SECRET_KEY = "SPARTA"
+
+MONGODB_CONNECTION_STRING = "mongodb+srv://molware911:Almulki12@cluster0.zqmrb50.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient(MONGODB_CONNECTION_STRING)
+db = client.dbsparta_finalproject
 
 
 
