@@ -1,0 +1,122 @@
+        body {
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            /* Memberikan tinggi penuh untuk body */
+            display: flex;
+            flex-direction: column;
+        }
+
+        #homepic.hero-home {
+            background-image: url(/static/bg.jpg);
+            background-size: cover;
+            background-position: center;
+            flex: 1;
+            /* Membuat gambar fleksibel untuk mengisi ruang kosong */
+        }
+
+        #homepic.hero-home img {
+            display: none;
+        }
+
+        .copyright {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Gaya umum untuk menu */
+        .navbar-nav .nav-link {
+            color: #000;
+            /* Warna teks default */
+            transition: color 0.3s ease;
+            /* Efek transisi warna */
+        }
+
+        /* Gaya menu yang sedang aktif */
+        .navbar-nav .nav-link:active,
+        .navbar-nav .nav-link:focus {
+            color: #007bff;
+            /* Warna teks saat aktif atau dalam fokus */
+            font-weight: bold;
+            /* Memberikan teks yang sedang aktif berat lebih */
+        }
+
+        .navbar {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .navbar-toggler-icon {
+            background-color: white;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            border-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e08e0b;
+            border-color: #e08e0b;
+            color: white;
+        }
+
+        /* Post Box Section */
+        .section {
+            background-color: #f2f2f2;
+            padding: 20px 0;
+        }
+
+        .box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .media{
+            display: flex;
+            align-items: center;
+        }
+        .image.is-64x64 img {
+            width: 60px;
+            /* Ganti dengan lebar yang diinginkan */
+            height: 60px;
+            /* Ganti dengan tinggi yang diinginkan */
+            object-fit: cover;
+            /* Untuk memastikan gambar tidak terdistorsi */
+            border-radius: 50%;
+            /* Untuk membuat gambar menjadi lingkaran */
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        /* Gaya tambahan untuk menyusun teks dan elemen di dalam post box */
+        .media-content {
+            padding-left: 15px;
+            flex: 1;
+            /* Menambahkan jarak antara gambar dan teks */
+        }
+
+        .content {
+            margin-bottom: 0;
+            /* Menghilangkan margin bawah pada teks */
+        }
+
+        a.level-item.is-sparta {
+            color: #f39c12;
+        }
+
+        a.level-item.is-sparta:hover {
+            color: #e08e0b;
+        }
+
+        */ footer {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
