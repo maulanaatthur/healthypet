@@ -24,6 +24,10 @@ def produk():
 def about():
     return render_template('about.html')
 
+@app.route("/forum")
+def forum():
+    return render_template('forum.html')
+
 @app.route("/mulaikonsultasi")
 def konsultasi():
     return render_template('artikel.html')
