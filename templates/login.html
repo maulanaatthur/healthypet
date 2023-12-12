@@ -21,8 +21,77 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{url_for("static", filename='index.css')}}">
+    <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
     <title>Hello All</title>
+     <style>
+        body {
+            background-image: url('static/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            color: black; /* Change text color to contrast with background */
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh; /* Adjust the height as needed */
+        }
+
+        .login-form {
+            background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            width: 300px; /* Atur lebar untuk membuat formulir persegi */
+            margin: auto; /* Posisikan formulir di tengah secara horizontal */
+        }
+
+          .login-btn {
+            width: 100%; /* Buat tombol mengambil lebar penuh formulir */
+        }
+    </style>
+
+    <script>
+         function sign_in() {
+            let username = $("#input-username").val();
+            let password = $("#input-password").val();
+
+            if (username === "") {
+                $("#help-id-login").text("Please input your id.");
+                $("#input-username").focus();
+                return;
+            } else {
+                $("#help-id-login").text("");
+            }
+
+            if (password === "") {
+                $("#help-password").text("Please input your password.");
+                $("#input-password").focus();
+                return;
+            } else {
+                $("#help-password-login").text("");
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                success: function (response) {
+                    if (response["result"] === "success") {
+                        $.cookie("mytoken", response["token"], { path: "/" });
+                        window.location.replace("/");
+                    } else {
+                        alert(response["msg"]);
+                    }
+                },
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -65,7 +134,27 @@
     </nav>
     <!-- end navbar -->
 
-    
+
+    <!-- login form -->
+    <div class="login-container">
+        <div class="container login-form">
+            <form>
+                <h2 class="text-center">Login</h2>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-warning" onclick="sign_in()">Login</button>
+                <button type="reset" class="btn btn-secondary">Kembali</button>
+            </form>
+            <p class="mt-3 text-center">Belum punya akun? <a href="/register">Registrasi disini</a></p>
+        </div>
+    </div>
+
     <footer class="copyright mt-0">
         <div class="container py-2">
             <p class="text-center my-3">Copyright © by Kelompok 3</p>
