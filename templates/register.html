@@ -28,28 +28,28 @@
             background-image: url('static/bg.jpg');
             background-size: cover;
             background-position: center;
-            height: 100vh;
+            height: 105vh;
             margin: 0;
             color: black; /* Change text color to contrast with background */
         }
 
-        .login-container {
+        .registration-container {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 80vh; /* Adjust the height as needed */
         }
 
-        .login-form {
+        .registration-form {
             background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 300px; /* Atur lebar untuk membuat formulir persegi */
+            width: 500px; /* Atur lebar untuk membuat formulir persegi */
             margin: auto; /* Posisikan formulir di tengah secara horizontal */
         }
 
-          .login-btn {
+          .register-btn {
             width: 100%; /* Buat tombol mengambil lebar penuh formulir */
         }
     </style>
@@ -134,35 +134,45 @@
         <div class="container registration-form">
             <form>
                 <h2 class="text-center">Registrasi</h2>
-                <div class="mb-3">
-                    <label for="fullname" class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" id="fullname" placeholder="Masukkan nama lengkap Anda">
+                <div class="mb-1 row">
+                    <div class="col">
+                        <label for="fullname" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="fullname" placeholder="Masukkan nama Anda">
+                    </div>
+                    <div class="col">
+                        <label for="username" class="form-label">Nama Pengguna</label>
+                        <input type="text" class="form-control" id="username" placeholder="Masukkan username">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="fullname" class="form-label">Nama Pengguna</label>
-                    <input type="text" class="form-control" id="username" placeholder="Masukkan username">
-                </div>
-                <div class="mb-3">
+                <div class="mb-1">
                     <label for="fullname" class="form-label">Alamat</label>
-                    <input type="text" class="form-control" id="alamat" placeholder="Masukkan username">
+                    <input type="text" class="form-control" id="alamat" placeholder="Masukkan domisili Anda">
                 </div>
-                <div class="mb-3">
-                    <label for="fullname" class="form-label">Nomor Hp</label>
-                    <input type="number" class="form-control" id="nomorhp" placeholder="Masukkan username">
+                <div class="mb-3 row">
+                    <div class="col">
+                         <label for="fullname" class="form-label">Nomor Hp</label>
+                    <input type="number" class="form-control" id="nomorhp" placeholder="Masukkan kontak">
+                    </div>
+                    <div class="col">
+                        <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Masukkan email Anda">
+                
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Masukkan alamat email Anda">
+               
+                
+                <div class="mb-3 row">
+                    <div class="col">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password anda">
+                    </div>
+                    <div class="col">
+                        <label for="password" class="form-label">Konfirmasi Password</label>
+                        <input type="password" class="form-control" id="password3" placeholder="Konfirmasi password anda">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Masukkan password Anda">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="password3" placeholder="Masukkan password Anda">
-                </div>
-                <button type="submit" class="btn btn-primary register-btn" onclick="sign_up()">Registrasi</button>
+               
+                <button type="submit" class="btn btn-warning register-btn" onclick="sign_up()">Registrasi</button>
             </form>
             <p class="mt-3 text-center">Sudah punya akun? <a href="/login">Login disini</a></p>
         </div>

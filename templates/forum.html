@@ -25,6 +25,252 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for("static", filename='forum.css' )}}">
     <title>Hello All</title>
+    <script>
+        $(document).ready(function () {
+            // Tangani pengiriman formulir
+            $("#formDiskusi").submit(function (event) {
+                event.preventDefault();
+                // Lakukan tindakan pengiriman formulir di sini
+                // Misalnya, kirim data menggunakan AJAX atau jalankan fungsi JavaScript lainnya
+                // Setelah itu, tutup modal
+                $('#formDiskusiModal').modal('hide');
+            });
+        });
+
+        function post() {
+            let comment = $('#textarea-post').val();
+            let today = new Date().toISOString();
+            $.ajax({
+                type: 'POST',
+                url: '/posting',
+                data: {
+                    comment_give: comment,
+                    date_give: today,
+                },
+                success: function (response) {
+                    $('#formDiskusiModal').removeClass('is-active');
+                    window.location.reload();
+                }
+            });
+        }
+
+        function time2str(date) {
+            let today = new Date();
+            let time = (today - date) / 1000 / 60;
+            if (time < 60) {
+                return parseInt(time) + ' minutes ago';
+            }
+            time = time / 60;
+            if (time < 24) {
+                return parseInt(time) + ' hours ago';
+            }
+            time = time / 24;
+            if (time < 7) {
+                return parseInt(time) + ' days ago';
+            }
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            return `${year}.${month}.${day}`;
+        }
+
+        function get_posts(username) {
+            if (username === undefined) {
+                username = '';
+
+            }
+            $('#post-box').empty();
+            $.ajax({
+                type: 'GET',
+                url: `/get_posts?username_give=${username}`,
+                data: {},
+                success: function (response) {
+                    if (response['result'] === 'success') {
+                        let posts = response['posts'];
+                        for (let i = 0; i < posts.length; i++) {
+                            let post = posts[i];
+                            let time_post = new Date(post['date']);
+                            let time_before = time2str(time_post);
+                            let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o";
+                            let class_star = post['star_by_me'] ? "fa-star" : "fa-star-o";
+                            let class_thumbsup = post['thumbsup_by_me'] ? "fa-thumbs-up" : "fa-thumbs-o-up";
+                            let html_temp = `
+                             <div class="box" id="${post['_id']}">
+                <article class="media">
+                    <div class="media-left">
+                        <a href="/user/${post['username']}" class="image is-64x64">
+                            <img src="/static/${post['profile_pic_real']}"
+                                alt="image" class="is-rounded">
+                        </a>
+                    </div>
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>${post['profile_name']}</strong><small>@${post['username']}</small>
+                                <small>${time_before}</small>
+                                <br>
+                                ${post['comment']}
+                            </p>
+                        </div>
+                        <nav class="level is-mobile">
+                            <div class="level-left">
+                                <a href="" class="level-item is-sparta" aria-label="heart"
+                                    onclick="toggle_like('${post["_id"]}', 'heart')">
+                                    <span class="icon is-small"><i class="fa ${class_heart}" aria-hidden="true"></i></span>&nbsp;
+                                    <span class="like-num">${num2str(post["count_heart"])}</span>
+
+                                </a>
+
+                                <a href="" class="level-item is-sparta" aria-label="star"
+                                    onclick="toggle_star('${post["_id"]}', 'star')">
+                                    <span class="icon is-small"><i class="fa ${class_star}" aria-hidden="true"></i></span>&nbsp;
+                                    <span class="like-num">${num2str(post["count_star"])}</span>
+
+                                </a>
+
+                                <a href="" class="level-item is-sparta" aria-label="thumbsup"
+                                    onclick="toggle_thumbsup('${post["_id"]}', 'thumbsup')">
+                                    <span class="icon is-small"><i class="fa ${class_thumbsup}" aria-hidden="true"></i></span>&nbsp;
+                                    <span class="like-num">${num2str(post["count_thumbsup"])}</span>
+
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+            </div>
+                            `;
+                            $('#post-box').append(html_temp);
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggle_like(post_id, type) {
+            console.log(post_id, type);
+            let $a_like = $(`#${post_id} a[aria-label='heart']`);
+            let $i_like = $a_like.find("i");
+            if ($i_like.hasClass("fa-heart")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/update_like",
+                    data: {
+                        post_id_give: post_id,
+                        type_give: type,
+                        action_give: "unlike",
+                    },
+                    success: function (response) {
+                        console.log("unlike");
+                        $i_like.addClass("fa-heart-o").removeClass("fa-heart");
+                        $a_like.find("span.like-num").text(num2str(response["count"]));
+                    },
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/update_like",
+                    data: {
+                        post_id_give: post_id,
+                        type_give: type,
+                        action_give: "like",
+                    },
+                    success: function (response) {
+                        console.log("like");
+                        $i_like.addClass("fa-heart").removeClass("fa-heart-o");
+                        $a_like.find("span.like-num").text(num2str(response["count"]));
+                    },
+                });
+            }
+        }
+
+        function num2str(count) {
+            if (count > 10000) {
+                return parseInt(count / 1000) + "k"
+            }
+            if (count > 500) {
+                return parseInt(count / 100) / 10 + "k"
+            }
+            if (count == 0) {
+                return ""
+            }
+            return count
+        }
+
+        function toggle_star(post_id, type) {
+            console.log(post_id, type);
+            let $a_like = $(`#${post_id} a[aria-label='star']`);
+            let $i_like = $a_like.find("i");
+            if ($i_like.hasClass("fa-star")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/update_like",
+                    data: {
+                        post_id_give: post_id,
+                        type_give: type,
+                        action_give: "unlike",
+                    },
+                    success: function (response) {
+                        console.log("unlike");
+                        $i_like.addClass("fa-star-o").removeClass("fa-star");
+                        $a_like.find("span.like-num").text(num2str(response["count"]));
+                    },
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/update_like",
+                    data: {
+                        post_id_give: post_id,
+                        type_give: type,
+                        action_give: "like",
+                    },
+                    success: function (response) {
+                        console.log("like");
+                        $i_like.addClass("fa-star").removeClass("fa-star-o");
+                        $a_like.find("span.like-num").text(num2str(response["count"]));
+                    },
+                });
+            }
+        }
+
+        function toggle_thumbsup(post_id, type) {
+            console.log(post_id, type);
+            let $a_like = $(`#${post_id} a[aria-label='thumbsup']`);
+            let $i_like = $a_like.find("i");
+            if ($i_like.hasClass("fa-thumbs-up")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/update_like",
+                    data: {
+                        post_id_give: post_id,
+                        type_give: type,
+                        action_give: "unlike",
+                    },
+                    success: function (response) {
+                        console.log("unlike");
+                        $i_like.addClass("fa-thumbs-o-up").removeClass("fa-thumbs-up");
+                        $a_like.find("span.like-num").text(num2str(response["count"]));
+                    },
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/update_like",
+                    data: {
+                        post_id_give: post_id,
+                        type_give: type,
+                        action_give: "like",
+                    },
+                    success: function (response) {
+                        console.log("like");
+                        $i_like.addClass("fa-thumbs-up").removeClass("fa-thumbs-o-up");
+                        $a_like.find("span.like-num").text(num2str(response["count"]));
+                    },
+                });
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -107,7 +353,8 @@
 
                 <!-- Tombol Start Discuss -->
                 <div class="ms-auto">
-                    <a href="/start-discuss" class="btn btn-warning">Mulai Berdiskusi</a>
+                    <button id="btnMulaiBerdiskusi" class="btn btn-warning" data-bs-toggle="modal"
+                        data-bs-target="#formDiskusiModal">Mulai Berdiskusi</button>
                 </div>
             </div>
         </nav>
@@ -115,9 +362,31 @@
         </div>
     </section>
 
+    <!-- Form Modal -->
+    <div class="modal fade" id="formDiskusiModal" tabindex="-1" aria-labelledby="formDiskusiModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- Ganti elemen input dengan textarea -->
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Judul Diskusi</label>
+                        <textarea class="form-control" id="textarea-post" rows="3"
+                            placeholder="Judul Diskusi"></textarea>
+                    </div>
+                    <!-- Tambahan elemen textarea lainnya jika diperlukan -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" onclick="post()">Simpan Perubahan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section">
         <div id="post-box" class="container">
-            <div class="box">
+            <!-- <div class="box">
                 <article class="media">
                     <div class="media-left">
                         <a class="image is-64x64" href="#">
@@ -145,11 +414,10 @@
                         </nav>
                     </div>
                 </article>
-            </div>
+            </div> -->
 
         </div>
     </section>
-
     <footer class="copyright mt-0">
         <div class="container py-2">
             <p class="text-center my-3">Copyright © by Kelompok 3</p>

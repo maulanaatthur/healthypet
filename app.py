@@ -101,6 +101,114 @@ def sign_up():
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
+@app.route("/posting", methods=['POST'])
+def posting():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        user_info = db.users.find_one({'username': payload.get('id')})
+        comment_receive = request.form.get('comment_give')
+        date_receive = request.form.get('date_give')
+        doc = {
+            'username': user_info.get('username'),
+            'profile_name': user_info.get('profile_name'),
+            'profile_pic_real': user_info.get('profile_pic_real'),
+            'comment': comment_receive,
+            'date': date_receive,
+        }
+        db.posts.insert_one(doc)
+        return jsonify({
+            'result': 'success',
+            'msg': 'Posting successful!'
+        })
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('home'))
+
+
+@app.route("/get_posts", methods=["GET"])
+def get_posts():
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        username_receive = request.args.get('username_give')
+        if username_receive == '':
+            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+
+        else:
+            posts = list(db.posts.find(
+                {'username': username_receive}).sort("date", -1).limit(20))
+        # We should fetch the full list of posts here
+
+        for post in posts:
+            post["_id"] = str(post["_id"])
+            post["count_heart"] = db.likes.count_documents(
+                {"post_id": post["_id"], "type": "heart"}
+            )
+            post["count_star"] = db.likes.count_documents(
+                {"post_id": post["_id"], "type": "star"}
+            )
+            post["count_thumbsup"] = db.likes.count_documents(
+                {"post_id": post["_id"], "type": "thumbsup"}
+            )
+            post["heart_by_me"] = bool(
+                db.likes.find_one(
+                    {"post_id": post["_id"], "type": "heart",
+                        "username": payload["id"]}
+                )
+            )
+            post["star_by_me"] = bool(
+                db.likes.find_one(
+                    {"post_id": post["_id"], "type": "star",
+                        "username": payload["id"]}
+                )
+            )
+            post["thumbsup_by_me"] = bool(
+                db.likes.find_one(
+                    {"post_id": post["_id"], "type": "thumbsup",
+                        "username": payload["id"]}
+                )
+            )
+        return jsonify(
+            {
+                "result": "success",
+                "msg": "Successful fetched all posts",
+                "posts": posts,
+            }
+        )
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+@app.route("/update_like", methods=["POST"])
+def update_like():
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        # We should change the like count for the post here
+        user_info = db.users.find_one({"username": payload["id"]})
+        post_id_receive = request.form["post_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "username": user_info["username"],
+            "type": type_receive,
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+        count = db.likes.count_documents(
+            {"post_id": post_id_receive, "type": type_receive}
+        )
+        return jsonify({"result": "success", "msg": "updated", "count": count})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 
 @app.route('/produk', methods=['GET', 'POST'])
 def produk():
