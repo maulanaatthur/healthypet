@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import jwt
 import datetime
 import hashlib
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, make_response
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
@@ -37,15 +37,15 @@ def home():
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
-    except jwt.exceptions.DecodeError:
-        msg = 'There was a problem logging you in'
-        return redirect(url_for('login', msg=msg))
-
 
 @app.route("/login", methods=['GET'])
 def login():
     msg = request.args.get('msg')
     return render_template('login.html', msg=msg)
+
+@app.route("/register")
+def register():
+    return render_template('register.html')
 
 
 @app.route("/sign_in", methods=["POST"])
@@ -63,26 +63,21 @@ def sign_in():
     if result:
         payload = {
             "id": username_receive,
-            # the token will be valid for 24 hours
             "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-        return jsonify(
-            {
-                "result": "success",
-                "token": token,
-            }
+        response = make_response(
+            jsonify({"result": "success", "token": token}),
+            200,
         )
-    # Let's also handle the case where the id and
-    # password combination cannot be found
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"  # Sesuaikan dengan URL Anda
+        response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
+        
+        return response
     else:
-        return jsonify(
-            {
-                "result": "fail",
-                "msg": "We could not find a user with that id/password combination",
-            }
-        )
+       return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
 
 
 @app.route("/sign_up/save", methods=["POST"])

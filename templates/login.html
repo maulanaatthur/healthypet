@@ -56,41 +56,28 @@
 
     <script>
          function sign_in() {
-            let username = $("#input-username").val();
-            let password = $("#input-password").val();
-
-            if (username === "") {
-                $("#help-id-login").text("Please input your id.");
-                $("#input-username").focus();
-                return;
-            } else {
-                $("#help-id-login").text("");
-            }
-
-            if (password === "") {
-                $("#help-password").text("Please input your password.");
-                $("#input-password").focus();
-                return;
-            } else {
-                $("#help-password-login").text("");
-            }
-            $.ajax({
-                type: "POST",
-                url: "/sign_in",
-                data: {
-                    username_give: username,
-                    password_give: password,
-                },
-                success: function (response) {
-                    if (response["result"] === "success") {
-                        $.cookie("mytoken", response["token"], { path: "/" });
-                        window.location.replace("/");
-                    } else {
-                        alert(response["msg"]);
-                    }
-                },
-            });
-        }
+        event.preventDefault();  // Tambahkan baris ini untuk mencegah formulir dikirim
+        let username = $("#username").val();
+        let password = $("#password").val();
+        $.ajax({
+            type: "POST",
+            url: "/sign_in",
+            data: {
+                username_give: username,
+                password_give: password,
+            },
+            xhrFields: {
+                withCredentials: true  // Izinkan kuki
+            },
+            success: function (response) {
+                if (response["result"] === "success") {
+                    window.location.replace("/");
+                } else {
+                    alert(response["msg"]);
+                }
+            },
+        });
+    }
     </script>
 </head>
 
