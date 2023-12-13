@@ -132,6 +132,10 @@ def about():
 def forum():
     return render_template('forum.html')
 
+@app.route("/profile")
+def profile():
+    return render_template('profile.html')
+
 
 @app.route("/mulaikonsultasi")
 def konsultasi():
