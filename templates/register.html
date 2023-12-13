@@ -21,121 +21,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
+    <link rel="stylesheet" href="{{url_for("static", filename='index.css')}}">
     <title>Hello All</title>
-    <style>
-        body {
-            background-image: url('static/bg.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            margin: 0;
-            color: black;
-            /* Change text color to contrast with background */
-        }
-
-        .login-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
-            /* Adjust the height as needed */
-        }
-
-        .login-form {
-            background-color: rgba(255, 255, 255, 0.8);
-            /* Add a semi-transparent white background */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 300px;
-            /* Atur lebar untuk membuat formulir persegi */
-            margin: auto;
-            /* Posisikan formulir di tengah secara horizontal */
-        }
-
-        .login-btn {
-            width: 100%;
-            /* Buat tombol mengambil lebar penuh formulir */
-        }
-    </style>
-
-    <script>
-          function sign_up() {
-            let inputPassword = $('#input-password');
-            let inputPassword2 = $("#input-password2");
-            let username = $("#input-username").val();
-            let password = inputPassword.val();
-            let password2 = inputPassword2.val();
-            let helpId = $('#help-id');
-            console.log(username, password, password2);
-
-            if (helpId.hasClass("is-danger")) {
-                alert("Please check your id");
-                return;
-            } else if (!helpId.hasClass("is-success")) {
-                alert("Please double check your id");
-                return;
-            }
-            let helpPassword2 = $('#help-password2');
-            let helpPassword = $('#help-pasword');
-
-            if (password === "") {
-                helpPassword
-                    .text("Please enter your password")
-                    .removeClass("is-safe")
-                    .addClass("is-danger");
-                inputPassword.focus();
-                return;
-            } else if (!is_password(password)) {
-                helpPassword
-                    .text(
-                        "Please check your password. For your password, please enter 8-20 English characters, numbers, or the following special characters (!@#$%^&*)"
-                    )
-                    .removeClass("is-safe")
-                    .addClass("is-danger");
-                inputPassword.focus();
-                return;
-            } else {
-                helpPassword
-                    .text("This password can be used!")
-                    .removeClass("is-danger")
-                    .addClass("is-success");
-            }
-            if (password2 === "") {
-                helpPassword2
-                    .text("Please enter your password")
-                    .removeClass("is-safe")
-                    .addClass("is-danger");
-                inputPassword2.focus();
-                return;
-            } else if (password2 !== password) {
-                helpPassword2
-                    .text("Your passwords do not match")
-                    .removeClass("is-safe")
-                    .addClass("is-danger");
-                inputPassword2.focus();
-                return;
-            } else {
-                helpPassword2
-                    .text("Your passwords do not match")
-                    .removeClass("is-danger")
-                    .addClass("is-success");
-            }
-            $.ajax({
-                type: "POST",
-                url: "/sign_up/save",
-                data: {
-                    username_give: username,
-                    password_give: password,
-                },
-                success: function (response) {
-                    alert("Your are signed up! Nice!");
-                    window.location.replace("/login");
-                },
-            });
-        }
-    </script>
 </head>
 
 <body>
@@ -178,28 +65,7 @@
     </nav>
     <!-- end navbar -->
 
-    <div class="registration-container">
-        <div class="container registration-form">
-            <form>
-                <h2 class="text-center">Registrasi</h2>
-                <div class="mb-3">
-                    <label for="fullname" class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" id="fullname" placeholder="Masukkan nama lengkap Anda">
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Masukkan alamat email Anda">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Masukkan password Anda">
-                </div>
-                <button type="submit" class="btn btn-primary register-btn" onclick="sign_up()">Registrasi</button>
-            </form>
-            <p class="mt-3 text-center">Sudah punya akun? <a href="/login">Login disini</a></p>
-        </div>
-    </div>
-
+    
     <footer class="copyright mt-0">
         <div class="container py-2">
             <p class="text-center my-3">Copyright © by Kelompok 3</p>
