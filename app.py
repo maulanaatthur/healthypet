@@ -101,7 +101,8 @@ def sign_up():
         "profile_pic": "",
         "profile_pic_real": "profile_pics/profile_placeholder.png",  # a default profile image
         # a profile description
-        "profile_info": ""
+        "profile_info": "",
+        "access": 1
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
@@ -113,6 +114,13 @@ def produk():
         # Handle POST Request here
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
+
+@app.route('/produk_admin', methods=['GET', 'POST'])
+def produk_admin():
+    if request.method == 'POST':
+        # Handle POST Request here
+        return render_template('pesan_obat_admin.html')
+    return render_template('pesan_obat_admin.html')
 
 
 @app.route("/about")
