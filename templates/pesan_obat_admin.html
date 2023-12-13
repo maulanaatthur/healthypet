@@ -77,269 +77,32 @@
 
         </div>
 
-        <form class="mb-5" action="/produk" method="GET">
-            <div class="input-group">
-                <input type="text" class="form-control form-control-lg" name="query" placeholder="Cari produk...">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </form>
-
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
+        <div class="container">
+            <div class="p-5 mb-4 bg-light rounded-3">
+              <div class="container-fluid py-5">
+                <div class="mb-3 custom-file">
+                  <input class="form-control" type="file" id="image" />
                 </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="image-title"
+                    placeholder="Nama Obat"
+                  />
                 </div>
-            </div>
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" id="tambah" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
+                <div class="mb-3">
+                  <input type="number" class="form-control"
+                  id="nomor"
+                  placeholder="Nomor Handphone">
                 </div>
+                <button onclick="posting()" type="button" class="btn btn-primary">Save</button>
+              </div>
             </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="row justify-content-start" id="cards_box">
             </div>
+          </div>
 
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Obat</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
-
-        </div>
-
-    </div>
-        
-    </section>
     <footer class="copyright mt-0">
         <div class="container py-2">
             <p class="text-center my-3">Copyright © by Kelompok 4</p>

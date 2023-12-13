@@ -1,4 +1,3 @@
-
 from pymongo import MongoClient
 import jwt
 import datetime
@@ -131,6 +130,10 @@ def about():
 @app.route("/forum")
 def forum():
     return render_template('forum.html')
+
+@app.route("/profile")
+def profile():
+    return render_template('profile.html')
 
 
 @app.route("/mulaikonsultasi")
