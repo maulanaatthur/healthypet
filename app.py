@@ -236,8 +236,8 @@ def save_product():
     content_receive = request.form.get('content_give')
     
     file = request.files['file_give']
-    extension = file.filename.split('.')
-    filename = f'static/produk/product-{title_receive}.{extension}'
+    extension = file.filename.split('.')[-1]
+    filename = f'static/product/product-{title_receive}.{extension}'
     file.save(filename)
     
     doc = {
