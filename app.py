@@ -217,6 +217,13 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
+@app.route("/delete", methods=["POST"])
+def delete():
+    id_receive = request.form.get('id_give')
+    db.obat.delete_one(
+        {'id' : int(id_receive) }
+    )
+
 @app.route('/produk_admin', methods=['GET', 'POST'])
 def produk_admin():
     if request.method == 'POST':
@@ -239,8 +246,11 @@ def save_product():
     extension = file.filename.split('.')[-1]
     filename = f'static/product/product-{title_receive}.{extension}'
     file.save(filename)
+    count = db.obat.count_documents({})
+    id= count + 1
     
     doc = {
+        'id' : id,
         'file': filename,
         'title': title_receive,
         'cost': cost_receive,
