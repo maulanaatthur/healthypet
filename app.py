@@ -224,6 +224,31 @@ def produk_admin():
         return render_template('pesan_obat_admin.html')
     return render_template('pesan_obat_admin.html')
 
+@app.route("/produk_admin_upload", methods=['GET'])
+def show_product():
+    articles = list(db.obat.find({},{'_id': False}))
+    return jsonify({'articles' : articles})
+
+@app.route('/produk_admin_upload', methods=['POST'])
+def save_product():
+    title_receive = request.form.get('title_give')
+    cost_receive = request.form.get('cost_give')
+    content_receive = request.form.get('content_give')
+    
+    file = request.files['file_give']
+    extension = file.filename.split('.')
+    filename = f'static/produk/product-{title_receive}.{extension}'
+    file.save(filename)
+    
+    doc = {
+        'file': filename,
+        'title': title_receive,
+        'cost': cost_receive,
+        'content' : content_receive,
+    }
+    db.obat.insert_one(doc)
+    return jsonify({'message' : 'data disimpan'})
+
 
 @app.route("/about")
 def about():
