@@ -36,11 +36,14 @@
 
     <script>
 
-    $(document).ready(function(){
-        //alert('Fully loaded');
-        listing();
-        bsCustomFileInput.init()
-       });
+        $(document).ready(function(){
+            // Initialize the page with the full list of products
+            listing();
+            bsCustomFileInput.init();
+        });
+
+
+       
 
        function listing(){
         $.ajax({
@@ -50,6 +53,7 @@
           success: function(response){
             let articles = response['articles'];
             for(let i = 0;i<articles.length;i++){
+              let id = articles[i]["id"];
               let title = articles[i]['title'];
               let content = articles[i]['content'];
               let cost = articles[i]['cost'];
@@ -79,7 +83,7 @@
                         <div class="d-flex gap-2">
                             <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
                             <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
+                            <button onclick="delete_obat(${id})" type="button" class="btn btn-danger">Delete!</button>
                         </div>
 
                     </div>
@@ -151,6 +155,18 @@
           }
         });
        }
+
+       function delete_obat(id) {
+        $.ajax({
+          type: "POST",
+          url: "/delete",
+          data: { id_give:id },
+          success: function (response) {
+            console.log(response);
+          },
+        });
+        window.location.reload();
+      }
       </script>
 
 
@@ -245,12 +261,12 @@
             </div>
           </div>
 
-          <form class="mb-5" action="/produk" method="GET">
+          <form class="mb-5" action="/produk_admin">
             <div class="input-group">
-                <input type="text" class="form-control form-control-lg" name="query" placeholder="Cari produk...">
+                <input type="text" class="form-control form-control-lg" id="query" placeholder="Cari produk...">
                 <button type="submit" class="btn btn-primary">Search</button>
             </div>
-            <div><button></button></div>
+
         </form>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="list_obat">
