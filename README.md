@@ -3,5 +3,3 @@ Judul : HealthyPet
 Anggota : - Ade
           - Adityo
           - Maulana
-
-![Uploading thousan yard.jpg…]()
