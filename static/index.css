@@ -170,3 +170,51 @@
             left: 0;
             background-color: blue;
         }
+
+        .history-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            /* Tambahkan border-radius untuk sudut yang lebih lembut */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Tambahkan shadow untuk efek ketinggian */
+        }
+
+         .history-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        /* Tambahkan gaya untuk history-image */
+        .history-image {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+         /* Tambahkan gaya untuk history-description */
+        .history-description {
+            flex: 2;
+        }
+
+         .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .about-section {
+            margin-bottom: 40px;
+        }
+
+        .about-section h2 {
+            color: #007bff;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            margin-top: 30px;
+        }
