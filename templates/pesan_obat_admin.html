@@ -33,7 +33,6 @@
     <link rel="stylesheet" href="{{url_for("static", filename='index.css')}}">
     <title>Our Product</title>
 
-
     <script>
 
         $(document).ready(function(){
@@ -65,7 +64,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">${title}</span>
+                                <span class="h5 card-title mt-2" id="nama_obat">${title}</span>
                                 <span class="fs-5">Rp .${cost}</span>
                             </div>
                         </div>
@@ -81,9 +80,8 @@
                     </div>
                     <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
                         <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
                             <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-                            <button onclick="delete_obat(${id})" type="button" class="btn btn-danger">Delete!</button>
+                            <button onclick="delete_obat(${id})" type="button" class="btn btn-danger flex-fill w-100">Delete!</button>
                         </div>
 
                     </div>
@@ -167,7 +165,32 @@
         });
         window.location.reload();
       }
+
+      function search(){
+        $('#nama_obat').each(function(){ 
+            $(this).attr('data-search-term', $(this).text().toLowerCase()); 
+            }); 
+              
+            $('.live-search-box').on('keyup', function(){ 
+              
+            var searchTerm = $(this).val().toLowerCase(); 
+              
+                $('.live-search-list li').each(function(){ 
+              
+                    if ($(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 || searchTerm.length < 1) { 
+                        $(this).show(); 
+                    } else { 
+                        $(this).hide(); 
+                    } 
+              
+                }); 
+              
+            }); 
+      }
+
       </script>
+
+      
 
 
 </head>
@@ -261,10 +284,10 @@
             </div>
           </div>
 
-          <form class="mb-5" action="/produk_admin">
+          <form class="mb-5">
             <div class="input-group">
-                <input type="text" class="form-control form-control-lg" id="query" placeholder="Cari produk...">
-                <button type="submit" class="btn btn-primary">Search</button>
+                <input type="text" class="form-control form-control-lg" id="input-word" placeholder="Cari produk...">
+                <button type="submit" class="btn btn-primary" onclick="search()">Search</button>
             </div>
 
         </form>
