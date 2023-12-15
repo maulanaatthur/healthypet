@@ -217,6 +217,17 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
+@app.route('/detail', methods=['POST'])
+def detail():
+    id_receive = request.form.get('id_give')
+    result = db.obat.find_one({'id': int(id_receive)})
+    if result:
+        return render_template(
+            'detail_pesan_obat.html',
+            result=result
+        )
+
+
 @app.route("/delete", methods=["POST"])
 def delete():
     id_receive = request.form.get('id_give')
@@ -259,7 +270,6 @@ def save_product():
     db.obat.insert_one(doc)
     return jsonify({'message' : 'data disimpan'})
 
-
 @app.route("/about")
 def about():
     return render_template('about.html')
@@ -287,12 +297,12 @@ def pesanan():
     return render_template('riwayat_obat.html')
 
 
-@app.route('/detail', methods=['GET', 'POST'])
-def detail():
-    if request.method == 'POST':
-        # Handle POST Request here
-        return render_template('detail_pesan_obat.html')
-    return render_template('detail_pesan_obat.html')
+# @app.route('/detail', methods=['GET', 'POST'])
+# def detail():
+#     if request.method == 'POST':
+#         # Handle POST Request here
+#         return render_template('detail_pesan_obat.html')
+#     return render_template('detail_pesan_obat.html')
 
 
 if __name__ == '__main__':
