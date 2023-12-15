@@ -84,11 +84,19 @@ def sign_in():
 def sign_up():
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
+    nama_receive = request.form['nama_give']
+    alamat_receive = request.form['alamat_give']
+    nomorhp_receive = request.form['nomorhp_give']
+    email_receive = request.form['email_give']
     password_hash = hashlib.sha256(
         password_receive.encode('utf-8')).hexdigest()
     doc = {
         "username": username_receive,                               # id
         "password": password_hash,                                  # password
+        "nama" : nama_receive,
+        "alamat" : alamat_receive,
+        "nomorHp" : nomorhp_receive,
+        "email" : email_receive,
         # user's name is set to their id by default
         "profile_name": username_receive,
         # profile image file name

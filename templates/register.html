@@ -24,38 +24,55 @@
     <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
     <title>Hello All</title>
     <style>
-         body {
+        body {
             background-image: url('static/bg.jpg');
             background-size: cover;
             background-position: center;
             height: 105vh;
             margin: 0;
-            color: black; /* Change text color to contrast with background */
+            color: black;
+            /* Change text color to contrast with background */
         }
 
         .registration-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 80vh; /* Adjust the height as needed */
+            height: 80vh;
+            /* Adjust the height as needed */
         }
 
         .registration-form {
-            background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Add a semi-transparent white background */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 500px; /* Atur lebar untuk membuat formulir persegi */
-            margin: auto; /* Posisikan formulir di tengah secara horizontal */
+            width: 500px;
+            /* Atur lebar untuk membuat formulir persegi */
+            margin: auto;
+            /* Posisikan formulir di tengah secara horizontal */
         }
 
-          .register-btn {
-            width: 100%; /* Buat tombol mengambil lebar penuh formulir */
+        .register-btn {
+            width: 100%;
+            /* Buat tombol mengambil lebar penuh formulir */
         }
     </style>
 
     <script>
-          function sign_up() {
+
+        function is_nickname(asValue) {
+            var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+            return regExp.test(asValue);
+        }
+
+        function is_password(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+
+        function sign_up() {
             let inputnama = $('#fullname');
             let inputusername = $('#username');
             let inputalamat = $('#alamat');
@@ -72,7 +89,34 @@
             let password = inputpassword.val();
             let password2 = inputpassword2.val();
 
-            console.log(nama, username, alamat, nomorhp, email, password,password2);
+            if (nama === ""){
+                alert("Masukkan nama lengkap Anda!");
+                return false;
+            }
+
+            if (username === ""){
+                alert("Masukkan username Anda!");
+                return;
+            }
+
+            if(alamat===""){
+                alert("Masukkan alamat Anda!");
+                return;
+            }
+
+            if(nomorhp===""){
+                alert("Masukkan info kontak anda")
+            }
+            
+            if (password === "" || password2===""){
+                alert("Masukkan Password anda!");
+                return;
+            } else if (password != password2){
+                alert("Password tidak sesuai");
+                return;
+            }
+
+            console.log(nama, username, alamat, nomorhp, email, password, password2);
 
             $.ajax({
                 type: "POST",
@@ -80,6 +124,10 @@
                 data: {
                     username_give: username,
                     password_give: password,
+                    nama_give: nama,
+                    alamat_give: alamat,
+                    nomorhp_give: nomorhp,
+                    email_give: email,
                 },
                 success: function (response) {
                     alert("Your are signed up! Nice!");
@@ -150,28 +198,29 @@
                 </div>
                 <div class="mb-3 row">
                     <div class="col">
-                         <label for="fullname" class="form-label">Nomor Hp</label>
-                    <input type="number" class="form-control" id="nomorhp" placeholder="Masukkan kontak">
+                        <label for="fullname" class="form-label">Nomor Hp</label>
+                        <input type="number" class="form-control" id="nomorhp" placeholder="Masukkan kontak">
                     </div>
                     <div class="col">
                         <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Masukkan email Anda">
-                
+                        <input type="email" class="form-control" id="email" required placeholder="Masukkan email Anda">
+
                     </div>
                 </div>
-               
-                
+
+
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password anda">
+                        <input type="password" class="form-control" id="password" required placeholder="Password anda">
                     </div>
                     <div class="col">
                         <label for="password" class="form-label">Konfirmasi Password</label>
-                        <input type="password" class="form-control" id="password3" placeholder="Konfirmasi password anda">
+                        <input type="password" class="form-control" id="password3" required
+                            placeholder="Konfirmasi password anda">
                     </div>
                 </div>
-               
+
                 <button type="submit" class="btn btn-warning register-btn" onclick="sign_up()">Registrasi</button>
             </form>
             <p class="mt-3 text-center">Sudah punya akun? <a href="/login">Login disini</a></p>
