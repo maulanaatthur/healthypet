@@ -27,13 +27,16 @@ app = Flask(__name__)
 def home():
     token_receive = request.cookies.get(TOKEN_KEY)
     try:
-        payload = jwt.decode(
-            token_receive,
-            SECRET_KEY,
-            algorithms=['HS256']
-        )
-        user_info = db.users.find_one({'username': payload.get('id')})
-        return render_template('index.html', user_info=user_info)
+        if token_receive is not None:
+            payload = jwt.decode(
+                token_receive.encode('utf-8'),
+                SECRET_KEY,
+                algorithms=['HS256']
+            )
+            user_info = db.users.find_one({'username': payload.get('id')})
+            return render_template('index.html', user_info=user_info)
+        else:
+            return redirect(url_for('login'))  # Redirect to login if token_receive is None
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
@@ -295,6 +298,11 @@ def profile():
 @app.route("/mulaikonsultasi")
 def konsultasi():
     return render_template('artikel.html')
+
+@app.route('/artikel')
+def artikel():
+    # Your code to render the artikel page goes here
+    return render_template('artikel.html')  # Adjust this based on your actual template file name
 
 
 @app.route('/pesanan', methods=['GET', 'POST'])
