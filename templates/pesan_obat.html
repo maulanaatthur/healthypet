@@ -7,11 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
@@ -23,6 +32,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for("static", filename='index.css')}}">
     <title>Our Product</title>
+
+
+    <script>
+
+    $(document).ready(function(){
+        //alert('Fully loaded');
+        listing();
+        bsCustomFileInput.init()
+       });
+
+       function listing(){
+        $.ajax({
+          type: 'GET',
+          url: '/produk_admin_upload',
+          data:{},
+          success: function(response){
+            let articles = response['articles'];
+            for(let i = 0;i<articles.length;i++){
+              let id = articles[i]["id"];
+              let title = articles[i]['title'];
+              let content = articles[i]['content'];
+              let cost = articles[i]['cost'];
+              let file = articles[i]['file'];
+
+              let temp_html = `
+              <div class="col mb-3">
+                <div class="card shadow h-100 border border-primary"><img src="/${file}" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="produk-text d-flex flex-column text-center">
+                                <span class="h5 card-title mt-2">${title}</span>
+                                <span class="fs-5">Rp .${cost}</span>
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-center gap-3 mt-3">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
+                            </div>
+                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
+                        <div class="d-flex gap-2">
+                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button" onclick="pesan(${id})">Beli Sekarang</button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">${title}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
+                            <p style="white-space: pre-line;text-align:justify;">${content}.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              `;
+              $('#list_obat').append(temp_html);
+            }
+          }
+        });
+       }
+
+       function pesan(id) {
+        $.ajax({
+          type: "POST",
+          url: "/detail",
+          data: { id_give:id },
+          success: function (response) {
+            console.log(response);
+          },
+        });
+      }
+
+      </script>
+
+
 </head>
 
 <body>
@@ -70,7 +173,7 @@
         <div class="kategoricaption mb-5">
             <div class="row">
                 <div class="col">
-                    <h1 class="text-center fw-bold judulkategori">Beli Obat</h1>
+                    <h1 class="text-center fw-bold judulkategori">PRODUK</h1>
                     <hr class="mx-auto" style="width:10%; background-color: #c3e2f0;">
 
                 </div>
@@ -85,261 +188,11 @@
             </div>
             <div><button></button></div>
         </form>
+        
+        <!-- pesan obat -->
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" id="tambah" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Testing</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col mb-3">
-                <div class="card shadow h-100 border border-primary"><img src="/static/dummy.jpeg" style="height: 250px!important;object-fit: contain;" class="card-img-top rounded-top">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="produk-text d-flex flex-column text-center">
-                                <span class="h5 card-title mt-2">Obat</span>
-                                <span class="fs-5">Rp .99999</span>
-                            </div>
-                        </div>
-                        <div class="col d-flex justify-content-center gap-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary btn-minus rounded-circle" style="width: 35px;height: 35px;">-</button>
-                            </div>
-                            <input type="number" id="quantity-648efaa6bc28dc439cddf6d3" step="1" max="10" value="1" name="quantity" class="border-1 text-center w-25">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-plus rounded-circle" style="width: 35px;height: 35px;">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
-                        <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="deskripsi_648efaa6bc28dc439cddf6d3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="fw-bold fs-5">Deskripsi:</span><br><br>
-                            <p style="white-space: pre-line;text-align:justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo dictum felis sed lobortis. Suspendisse ornare, lectus quis auctor bibendum, massa dui vehicula neque, id rutrum ante tellus tristique tortor. Praesent in erat quis tellus ultrices aliquam ut vitae risus. Suspendisse potenti. In hac habitasse platea dictumst. Curabitur erat arcu, semper quis felis et, elementum euismod nisi. Quisque quis dolor a tellus viverra ultrices. Praesent egestas sodales arcu, eget porta eros vestibulum at. Quisque tortor urna, placerat id viverra sed, luctus vitae purus. Integer id leo in orci dapibus consectetur sit amet at quam. Quisque consequat, massa in euismod suscipit, quam nulla euismod neque, at pulvinar sapien lectus non ligula. Sed vel bibendum mauris.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
-
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="list_obat">
         </div>
-
-    </div>
 
     <!-- pesan obat -->
 

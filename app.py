@@ -217,6 +217,24 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
+@app.route('/detail', methods=['POST'])
+def detail():
+    id_receive = request.form.get('id_give')
+    result = db.obat.find_one({'id': int(id_receive)})
+    if result:
+        return render_template(
+            'detail_pesan_obat.html',
+            result=result
+        )
+
+
+@app.route("/delete", methods=["POST"])
+def delete():
+    id_receive = request.form.get('id_give')
+    db.obat.delete_one(
+        {'id' : int(id_receive) }
+    )
+
 @app.route('/produk_admin', methods=['GET', 'POST'])
 def produk_admin():
     if request.method == 'POST':
@@ -224,6 +242,33 @@ def produk_admin():
         return render_template('pesan_obat_admin.html')
     return render_template('pesan_obat_admin.html')
 
+@app.route("/produk_admin_upload", methods=['GET'])
+def show_product():
+    articles = list(db.obat.find({},{'_id': False}))
+    return jsonify({'articles' : articles})
+
+@app.route('/produk_admin_upload', methods=['POST'])
+def save_product():
+    title_receive = request.form.get('title_give')
+    cost_receive = request.form.get('cost_give')
+    content_receive = request.form.get('content_give')
+    
+    file = request.files['file_give']
+    extension = file.filename.split('.')[-1]
+    filename = f'static/product/product-{title_receive}.{extension}'
+    file.save(filename)
+    count = db.obat.count_documents({})
+    id= count + 1
+    
+    doc = {
+        'id' : id,
+        'file': filename,
+        'title': title_receive,
+        'cost': cost_receive,
+        'content' : content_receive,
+    }
+    db.obat.insert_one(doc)
+    return jsonify({'message' : 'data disimpan'})
 
 @app.route("/about")
 def about():
@@ -252,12 +297,12 @@ def pesanan():
     return render_template('riwayat_obat.html')
 
 
-@app.route('/detail', methods=['GET', 'POST'])
-def detail():
-    if request.method == 'POST':
-        # Handle POST Request here
-        return render_template('detail_pesan_obat.html')
-    return render_template('detail_pesan_obat.html')
+# @app.route('/detail', methods=['GET', 'POST'])
+# def detail():
+#     if request.method == 'POST':
+#         # Handle POST Request here
+#         return render_template('detail_pesan_obat.html')
+#     return render_template('detail_pesan_obat.html')
 
 
 if __name__ == '__main__':
