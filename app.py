@@ -235,6 +235,15 @@ def detail():
             result=result
         )
 
+@app.route('/detail_testing', methods=['POST'])
+def detail():
+    id_receive = request.form.get('id_give')
+    result = db.obat.find_one({'id': int(id_receive)})
+    if result:
+        return render_template(
+            'detail_pesan_obat.html',
+            result=result
+        )
 
 @app.route("/delete", methods=["POST"])
 def delete():
