@@ -13,12 +13,16 @@ app.config["UPLOAD_FOLDER"] = "./static/profile_pics"
 
 SECRET_KEY = "SPARTA"
 
-MONGODB_CONNECTION_STRING = "mongodb+srv://tes:learningx@cluster0.cyjbgzl.mongodb.net/?retryWrites=true&w=majority"
+MONGODB_CONNECTION_STRING = "mongodb+srv://molware911:Almulki12@cluster0.zqmrb50.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.dbsparta_finalproject
 
 
-@app.route("/", methods=["GET"])
+
+app = Flask(__name__)
+
+
+@app.route('/', methods=['GET'])
 def home():
     token_receive = request.cookies.get("mytoken")
     try:
@@ -294,17 +298,35 @@ def user(username):
         return render_template("profile.html", user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+    
+@app.route("/update_profile", methods=["POST"])
+def save_img():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        username = payload["id"]
+        name_receive = request.form["name_give"]
+        about_receive = request.form["about_give"]
+        alamat_receive = request.form["alamat_give"]
+        new_doc = {"profile_name": name_receive, "profile_info": about_receive , "alamat":alamat_receive}
+        if "file_give" in request.files:
+            file = request.files["file_give"]
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"profile_pics/{username}.{extension}"
+            file.save("./static/" + file_path)
+            new_doc["profile_pic"] = filename
+            new_doc["profile_pic_real"] = file_path
+        db.users.update_one({"username": payload["id"]}, {"$set": new_doc})
+        return jsonify({"result": "success", "msg": "Profile updated!"})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 
 @app.route("/mulaikonsultasi")
 def konsultasi():
     return render_template('artikel.html')
-
-@app.route('/artikel')
-def artikel():
-    # Your code to render the artikel page goes here
-    return render_template('artikel.html')  # Adjust this based on your actual template file name
 
 
 @app.route('/pesanan', methods=['GET', 'POST'])
@@ -315,7 +337,7 @@ def pesanan():
     return render_template('riwayat_obat.html')
 
 
-# @app.route('/detail', methods=['GET', 'POST'])
+# @app.route('/detaia', methods=['GET', 'POST'])
 # def detail():
 #     if request.method == 'POST':
 #         # Handle POST Request here
