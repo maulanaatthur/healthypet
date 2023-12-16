@@ -18,7 +18,6 @@ client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.dbsparta_finalproject
 
 
-
 app = Flask(__name__)
 
 
@@ -37,10 +36,30 @@ def home():
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
 
+
+@app.route("/user/<username>", methods=['GET'])
+def user(username):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        status = username == payload.get('id')
+        user_info = db.users.find_one({'username': username}, {'_id': False})
+        return render_template('user.html',
+                               user_info=user_info,
+                               status=status)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('login'))
+
+
 @app.route("/login", methods=['GET'])
 def login():
     msg = request.args.get('msg')
     return render_template('login.html', msg=msg)
+
 
 @app.route("/register")
 def register():
@@ -71,12 +90,13 @@ def sign_in():
             200,
         )
         response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"  # Sesuaikan dengan URL Anda
+        # Sesuaikan dengan URL Anda
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"
         response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
-        
+
         return response
     else:
-       return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
+        return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
 
 
 @app.route("/sign_up/save", methods=["POST"])
@@ -92,10 +112,10 @@ def sign_up():
     doc = {
         "username": username_receive,                               # id
         "password": password_hash,                                  # password
-        "nama" : nama_receive,
-        "alamat" : alamat_receive,
-        "nomorHp" : nomorhp_receive,
-        "email" : email_receive,
+        "nama": nama_receive,
+        "alamat": alamat_receive,
+        "nomorHp": nomorhp_receive,
+        "email": email_receive,
         # user's name is set to their id by default
         "profile_name": username_receive,
         # profile image file name
@@ -107,6 +127,7 @@ def sign_up():
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
+
 
 @app.route("/posting", methods=['POST'])
 def posting():
@@ -224,6 +245,7 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
+
 @app.route('/detail', methods=['POST'])
 def detail():
     id_receive = request.form.get('id_give')
@@ -239,8 +261,9 @@ def detail():
 def delete():
     id_receive = request.form.get('id_give')
     db.obat.delete_one(
-        {'id' : int(id_receive) }
+        {'id': int(id_receive)}
     )
+
 
 @app.route('/produk_admin', methods=['GET', 'POST'])
 def produk_admin():
@@ -249,33 +272,36 @@ def produk_admin():
         return render_template('pesan_obat_admin.html')
     return render_template('pesan_obat_admin.html')
 
+
 @app.route("/produk_admin_upload", methods=['GET'])
 def show_product():
-    articles = list(db.obat.find({},{'_id': False}))
-    return jsonify({'articles' : articles})
+    articles = list(db.obat.find({}, {'_id': False}))
+    return jsonify({'articles': articles})
+
 
 @app.route('/produk_admin_upload', methods=['POST'])
 def save_product():
     title_receive = request.form.get('title_give')
     cost_receive = request.form.get('cost_give')
     content_receive = request.form.get('content_give')
-    
+
     file = request.files['file_give']
     extension = file.filename.split('.')[-1]
     filename = f'static/product/product-{title_receive}.{extension}'
     file.save(filename)
     count = db.obat.count_documents({})
-    id= count + 1
-    
+    id = count + 1
+
     doc = {
-        'id' : id,
+        'id': id,
         'file': filename,
         'title': title_receive,
         'cost': cost_receive,
-        'content' : content_receive,
+        'content': content_receive,
     }
     db.obat.insert_one(doc)
-    return jsonify({'message' : 'data disimpan'})
+    return jsonify({'message': 'data disimpan'})
+
 
 @app.route("/about")
 def about():
@@ -285,6 +311,7 @@ def about():
 @app.route("/forum")
 def forum():
     return render_template('forum.html')
+
 
 @app.route("/profile")
 def profile():
