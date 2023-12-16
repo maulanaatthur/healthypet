@@ -32,6 +32,7 @@ def home():
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
+    
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -282,9 +283,18 @@ def about():
 def forum():
     return render_template('forum.html')
 
-@app.route("/profile")
-def profile():
-    return render_template('profile.html')
+
+@app.route("/profile/<username>", methods=["GET"])
+def user(username):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        status = username == payload.get("id")
+        user_info = db.users.find_one({"username": username}, {"_id": False})
+        return render_template("profile.html", user_info=user_info, status=status)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 
 
 @app.route("/mulaikonsultasi")
