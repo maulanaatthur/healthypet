@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
@@ -23,62 +25,68 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
     <title>Hello All</title>
-     <style>
+    <style>
         body {
             background-image: url('static/bg.jpg');
             background-size: cover;
             background-position: center;
             height: 100vh;
             margin: 0;
-            color: black; /* Change text color to contrast with background */
+            color: black;
+            /* Change text color to contrast with background */
         }
 
         .login-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 80vh; /* Adjust the height as needed */
+            height: 80vh;
+            /* Adjust the height as needed */
         }
 
         .login-form {
-            background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Add a semi-transparent white background */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 300px; /* Atur lebar untuk membuat formulir persegi */
-            margin: auto; /* Posisikan formulir di tengah secara horizontal */
+            width: 300px;
+            /* Atur lebar untuk membuat formulir persegi */
+            margin: auto;
+            /* Posisikan formulir di tengah secara horizontal */
         }
 
-          .login-btn {
-            
-            width: 100%; /* Buat tombol mengambil lebar penuh formulir */
+        .login-btn {
+
+            width: 100%;
+            /* Buat tombol mengambil lebar penuh formulir */
         }
     </style>
 
     <script>
-         function sign_in() {
-        event.preventDefault();  // Tambahkan baris ini untuk mencegah formulir dikirim
-        let username = $("#username").val();
-        let password = $("#password").val();
-        $.ajax({
-            type: "POST",
-            url: "/sign_in",
-            data: {
-                username_give: username,
-                password_give: password,
-            },
-            xhrFields: {
-                withCredentials: true  // Izinkan kuki
-            },
-            success: function (response) {
-                if (response["result"] === "success") {
-                    window.location.replace("/");
-                } else {
-                    alert(response["msg"]);
-                }
-            },
-        });
-    }
+        function sign_in() {
+            event.preventDefault();  // Tambahkan baris ini untuk mencegah formulir dikirim
+            let username = $("#username").val();
+            let password = $("#password").val();
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                xhrFields: {
+                    withCredentials: true  // Izinkan kuki
+                },
+                success: function (response) {
+                    if (response["result"] === "success") {
+                        window.location.replace("/");
+                    } else {
+                        alert(response["msg"]);
+                    }
+                },
+            });
+        }
     </script>
 </head>
 

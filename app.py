@@ -35,6 +35,10 @@ def home():
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="Your token has expired"))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="There was problem logging you in"))
 
 
 @app.route("/user/<username>", methods=['GET'])
@@ -69,6 +73,34 @@ def register():
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
     # Sign in
+    # username_receive = request.form["username_give"]
+    # password_receive = request.form["password_give"]
+    # pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
+    # result = db.users.find_one(
+    #     {
+    #         "username": username_receive,
+    #         "password": pw_hash,
+    #     }
+    # )
+    # if result:
+    #     payload = {
+    #         "id": username_receive,
+    #         "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
+    #     }
+    #     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+    #     response = make_response(
+    #         jsonify({"result": "success", "token": token}),
+    #         200,
+    #     )
+    #     response.headers["Access-Control-Allow-Credentials"] = "true"
+    #     # Sesuaikan dengan URL Anda
+    #     response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"
+    #     response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
+
+    #     return response
+    # else:
+    #     return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
     username_receive = request.form["username_give"]
     password_receive = request.form["password_give"]
     pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
@@ -81,22 +113,26 @@ def sign_in():
     if result:
         payload = {
             "id": username_receive,
+            # the token will be valid for 24 hours
             "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-        response = make_response(
-            jsonify({"result": "success", "token": token}),
-            200,
+        return jsonify(
+            {
+                "result": "success",
+                "token": token,
+            }
         )
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        # Sesuaikan dengan URL Anda
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"
-        response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
-
-        return response
+    # Let's also handle the case where the id and
+    # password combination cannot be found
     else:
-        return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
+        return jsonify(
+            {
+                "result": "fail",
+                "msg": "We could not find a user with that id/password combination",
+            }
+        )
 
 
 @app.route("/sign_up/save", methods=["POST"])
@@ -149,67 +185,71 @@ def posting():
             'date': date_receive,
         }
         db.posts.insert_one(doc)
+        print(request.form)
         return jsonify({
             'result': 'success',
             'msg': 'Posting successful!'
         })
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for('home'))
+        # return jsonify({
+        #     'result': 'fail',
+        #     'msg': 'Failed to post. Please log in again.'
+        # })
 
-
-@app.route("/get_posts", methods=["GET"])
+@app.route('/get_posts', methods=['GET'])
 def get_posts():
     token_receive = request.cookies.get("mytoken")
     try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
         username_receive = request.args.get('username_give')
         if username_receive == '':
-            posts = list(db.posts.find({}).sort("date", -1).limit(20))
-
+            posts = list(db.posts.find({}).sort('date', -1).limit(20))
         else:
-            posts = list(db.posts.find(
-                {'username': username_receive}).sort("date", -1).limit(20))
-        # We should fetch the full list of posts here
-
+            posts = list(db.posts.find({'username': username_receive}).sort('date', -1))
         for post in posts:
-            post["_id"] = str(post["_id"])
-            post["count_heart"] = db.likes.count_documents(
-                {"post_id": post["_id"], "type": "heart"}
-            )
-            post["count_star"] = db.likes.count_documents(
-                {"post_id": post["_id"], "type": "star"}
-            )
-            post["count_thumbsup"] = db.likes.count_documents(
-                {"post_id": post["_id"], "type": "thumbsup"}
-            )
-            post["heart_by_me"] = bool(
-                db.likes.find_one(
-                    {"post_id": post["_id"], "type": "heart",
-                        "username": payload["id"]}
-                )
-            )
-            post["star_by_me"] = bool(
-                db.likes.find_one(
-                    {"post_id": post["_id"], "type": "star",
-                        "username": payload["id"]}
-                )
-            )
-            post["thumbsup_by_me"] = bool(
-                db.likes.find_one(
-                    {"post_id": post["_id"], "type": "thumbsup",
-                        "username": payload["id"]}
-                )
-            )
-        return jsonify(
-            {
-                "result": "success",
-                "msg": "Successful fetched all posts",
-                "posts": posts,
-            }
-        )
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
+            post['_id'] = str(post['_id'])
+            post['count_heart'] = db.likes.count_documents({
+                'post_id' : post['_id'],
+                'type' : 'heart'
+            })
 
+            post['count_star'] = db.likes.count_documents({
+                'post_id' : post['_id'],
+                'type' : 'star'
+            })
+
+            post['count_thumbsup'] = db.likes.count_documents({
+                'post_id' : post['_id'],
+                'type' : 'thumbsup'
+            })
+
+            post['heart_by_me'] = bool(db.likes.find_one({
+                'post_id' : post['_id'],
+                'type' : 'heart',
+                'username' : payload.get('id')
+            }))
+            post['star_by_me'] = bool(db.likes.find_one({
+                'post_id' : post['_id'],
+                'type' : 'star',
+                'username' : payload.get('id')
+            }))
+            post['thumbsup_by_me'] = bool(db.likes.find_one({
+                'post_id' : post['_id'],
+                'type' : 'thumbsup',
+                'username' : payload.get('id')
+            }))
+        return jsonify({
+            'result': 'success',
+            'msg': 'Succesfully fetch all post',
+            'posts': posts,
+        })
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('home'))
 
 @app.route("/update_like", methods=["POST"])
 def update_like():
