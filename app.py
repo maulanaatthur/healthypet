@@ -235,19 +235,6 @@ def detail():
             result=result
         )
 
-<<<<<<< HEAD
-@app.route('/detail_testing', methods=['POST'])
-def detail():
-    id_receive = request.form.get('id_give')
-    result = db.obat.find_one({'id': int(id_receive)})
-    if result:
-        return render_template(
-            'detail_pesan_obat.html',
-            result=result
-        )
-=======
->>>>>>> parent of f1306d3 (debugging pesan_obat.html)
-
 @app.route("/delete", methods=["POST"])
 def delete():
     id_receive = request.form.get('id_give')
@@ -313,7 +300,7 @@ def user(username):
     
 @app.route("/update_profile", methods=["POST"])
 def save_img():
-    token_receive = request.cookies.get(TOKEN_KEY)
+    token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username = payload["id"]
