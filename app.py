@@ -225,8 +225,8 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
-@app.route('/detail_get', methods=['POST'])
-def detail_get():
+@app.route('/detail', methods=['POST'])
+def detail():
     id_receive = request.form.get('id_give')
     result = db.obat.find_one({'id': int(id_receive)})
     if result:
@@ -234,17 +234,6 @@ def detail_get():
             'detail_pesan_obat.html',
             result=result
         )
-
-@app.route('/detail', methods=['GET'])
-def detail_get():
-    id_receive = request.form.get('id_give')
-    result = db.obat.find_one({'id': int(id_receive)})
-    if result:
-        return render_template(
-            'detail_pesan_obat.html',
-            result=result
-        )
-
 
 
 @app.route("/delete", methods=["POST"])
@@ -312,7 +301,7 @@ def user(username):
     
 @app.route("/update_profile", methods=["POST"])
 def save_img():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username = payload["id"]
