@@ -337,7 +337,7 @@ def pesanan():
     return render_template('riwayat_obat.html')
 
 
-# @app.route('/detail', methods=['GET', 'POST'])
+# @app.route('/detaia', methods=['GET', 'POST'])
 # def detail():
 #     if request.method == 'POST':
 #         # Handle POST Request here
