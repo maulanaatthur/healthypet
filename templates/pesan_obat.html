@@ -115,7 +115,7 @@
        function pesan(id) {
         $.ajax({
           type: "POST",
-          url: "/detail",
+          url: "/detail_get",
           data: { id_give:id },
           success: function (response) {
             console.log(response);
