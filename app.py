@@ -235,6 +235,7 @@ def detail():
             result=result
         )
 
+
 @app.route("/delete", methods=["POST"])
 def delete():
     id_receive = request.form.get('id_give')
