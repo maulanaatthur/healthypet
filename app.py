@@ -13,23 +13,19 @@ app.config["UPLOAD_FOLDER"] = "./static/profile_pics"
 
 SECRET_KEY = "SPARTA"
 
-MONGODB_CONNECTION_STRING = "mongodb+srv://molware911:Almulki12@cluster0.zqmrb50.mongodb.net/?retryWrites=true&w=majority"
+MONGODB_CONNECTION_STRING = "mongodb+srv://tes:learningx@cluster0.cyjbgzl.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.dbsparta_finalproject
 
 
-
-app = Flask(__name__)
-
-
-@app.route('/', methods=['GET'])
+@app.route("/", methods=["GET"])
 def home():
     token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(
             token_receive,
             SECRET_KEY,
-            algorithms=['HS256']
+            algorithms=['HS256'],
         )
         user_info = db.users.find_one({'username': payload.get('id')})
         return render_template('index.html', user_info=user_info)
