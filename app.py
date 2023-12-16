@@ -17,7 +17,6 @@ MONGODB_CONNECTION_STRING = "mongodb+srv://molware911:Almulki12@cluster0.zqmrb50
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.dbsparta_finalproject
 
-TOKEN_KEY = 'mytoken'
 
 
 app = Flask(__name__)
@@ -25,18 +24,15 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
-    token_receive = request.cookies.get(TOKEN_KEY)
+    token_receive = request.cookies.get("mytoken")
     try:
-        if token_receive is not None:
-            payload = jwt.decode(
-                token_receive.encode('utf-8'),
-                SECRET_KEY,
-                algorithms=['HS256']
-            )
-            user_info = db.users.find_one({'username': payload.get('id')})
-            return render_template('index.html', user_info=user_info)
-        else:
-            return redirect(url_for('login'))  # Redirect to login if token_receive is None
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        user_info = db.users.find_one({'username': payload.get('id')})
+        return render_template('index.html', user_info=user_info)
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
@@ -114,7 +110,7 @@ def sign_up():
 
 @app.route("/posting", methods=['POST'])
 def posting():
-    token_receive = request.cookies.get(TOKEN_KEY)
+    token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(
             token_receive,
