@@ -35,8 +35,6 @@ def home():
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="Your token has expired"))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="There was problem logging you in"))
 
@@ -57,6 +55,7 @@ def user(username):
                                status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for('login'))
+
 
 
 @app.route("/login", methods=['GET'])
@@ -353,9 +352,40 @@ def forum():
     return render_template('forum.html')
 
 
-@app.route("/profile")
-def profile():
-    return render_template('profile.html')
+
+@app.route("/profile/<username>", methods=["GET"])
+def user(username):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        status = username == payload.get("id")
+        user_info = db.users.find_one({"username": username}, {"_id": False})
+        return render_template("profile.html", user_info=user_info, status=status)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+    
+@app.route("/update_profile", methods=["POST"])
+def save_img():
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        username = payload["id"]
+        name_receive = request.form["name_give"]
+        about_receive = request.form["about_give"]
+        alamat_receive = request.form["alamat_give"]
+        new_doc = {"profile_name": name_receive, "profile_info": about_receive , "alamat":alamat_receive}
+        if "file_give" in request.files:
+            file = request.files["file_give"]
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"profile_pics/{username}.{extension}"
+            file.save("./static/" + file_path)
+            new_doc["profile_pic"] = filename
+            new_doc["profile_pic_real"] = file_path
+        db.users.update_one({"username": payload["id"]}, {"$set": new_doc})
+        return jsonify({"result": "success", "msg": "Profile updated!"})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 @app.route("/mulaikonsultasi")
@@ -371,12 +401,6 @@ def pesanan():
     return render_template('riwayat_obat.html')
 
 
-# @app.route('/detail', methods=['GET', 'POST'])
-# def detail():
-#     if request.method == 'POST':
-#         # Handle POST Request here
-#         return render_template('detail_pesan_obat.html')
-#     return render_template('detail_pesan_obat.html')
 
 
 if __name__ == '__main__':

@@ -22,7 +22,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for("static", filename='index.css')}}">
-    <title>Hello All</title>
+    <title>Profile</title>
+
+    <script>
+
+        function sign_out() {
+            $.removeCookie("mytoken", { path: "/" });
+            alert("Signed out!");
+            window.location.href = "/login";
+          }
+
+        function update_profile() {
+            let name = $("#input-name").val();
+            let file = $("#input-pic")[0].files[0];
+            let about = $("#textarea-about").val();
+            let alamat = $("input-alamat").val();
+            let form_data = new FormData();
+            form_data.append("file_give", file);
+            form_data.append("name_give", name);
+            form_data.append("about_give", about);
+            form_data.append("alamat_give", about);
+            console.log(name, file, about,alamat, form_data);
+          
+            $.ajax({
+              type: "POST",
+              url: "/update_profile",
+              data: form_data,
+              cache: false,
+              contentType: false,
+              processData: false,
+              success: function (response) {
+                if (response["result"] === "success") {
+                  alert(response["msg"]);
+                  window.location.reload();
+                }
+              },
+            });
+          }
+    </script>
 </head>
 
 <body>
@@ -65,6 +102,8 @@
     </nav>
     <!-- end navbar -->
 
+    
+
     <div class="container my-5 px-3" style="min-height:100vh">
         <div class="kategoricaption mb-5">
             <div class="row">
@@ -76,6 +115,119 @@
             </div>
 
         </div>
+
+        <section class="vh-100" style="background-color: #f4f5f7;">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-lg-6 mb-4 mb-lg-0">
+                  <div class="card mb-3" style="border-radius: .5rem;">
+                    <div class="row g-0">
+                      <div class="col-md-4 gradient-custom text-center text-white"
+                        style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                        <img src="{{ url_for('static', filename=user_info.profile_pic_real) }}"
+                          alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+                        <h5>{{ user_info.profile_name }}</h5>
+                        <p>@{{ user_info.username }}</p>
+                        <i class="far fa-edit mb-5"></i>
+                        {% if status %}
+  <nav id="btns-me" class="level is-mobile" style="margin-top: 2rem">
+    <a class="button level-item has-text-centered is-sparta" aria-label="edit"
+      onclick='$("#modal-edit").addClass("is-active")' style="color: blue;">
+      Edit Profile<span class="icon is-small"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+    </a>
+
+    <a class="button level-item has-text-centered is-sparta is-outlined" aria-label="logout" style="color: blue;" onclick="sign_out()">
+      Sign Out<span class="icon is-small"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+    </a>
+  </nav>
+  <div class="modal" id="modal-edit">
+    <div class="modal-background" onclick='$("#modal-edit").removeClass("is-active")'></div>
+    <div class="modal-content">
+      <div class="box">
+        <article class="media">
+          <div class="media-content">
+            <div class="field">
+              <label class="label" for="input-name">Nama</label>
+              <p class="control">
+                <input id="input-name" class="input" placeholder="Your name" value="{{ user_info.profile_name }}" />
+              </p>
+            </div>
+            <div class="field">
+                <label class="label" for="input-name">Alamat</label>
+                <p class="control">
+                  <input id="input-alamat" class="input" placeholder="Your Address" value="{{ user_info.alamat }}" />
+                </p>
+              </div>
+            <div class="field">
+              <label class="label" for="input-pic">Foto Profile</label>
+
+              <div class="control is-expanded">
+                <div class="file has-name">
+                  <label class="file-label" style="width: 100%">
+                    <input id="input-pic" class="file-input" type="file" name="resume" />
+                    <span class="file-cta"><span class="file-icon"><i class="fa fa-upload"></i></span>
+                      <span class="file-label">Select a file</span>
+                    </span>
+                    <span id="file-name" class="file-name" style="width: 100%; max-width: 100%">{{ user_info.profile_pic
+                      }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="textarea-about">Deskprisikan Dirimu?</label>
+
+              <p class="control">
+                <textarea id="textarea-about" class="textarea" placeholder="Introduce yourself">
+{{ user_info.profile_info }}</textarea>
+              </p>
+            </div>
+            <nav class="level is-mobile">
+              <div class="level-left"></div>
+              <div class="level-right">
+                <div class="level-item">
+                  <a class="button is-sparta" onclick="update_profile()">Update</a>
+                </div>
+                <div class="level-item">
+                  <a class="button is-sparta is-outlined" onclick='$("#modal-edit").removeClass("is-active")'>Cancel</a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </article>
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"
+      onclick='$("#modal-edit").removeClass("is-active")'></button>
+  </div>
+  {% endif %}
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body p-4">
+                          <h6>{{ user_info.profile_info }}</h6>
+                          <hr class="mt-0 mb-4">
+                          <div class="row pt-1">
+                            <div class="col-6 mb-3">
+                                <h6>Nama</h6>
+                                <p class="text-muted">{{ user_info.nama }}</p>
+                              </div>
+                            <div class="col-6 mb-3">
+                              <h6>Alamat</h6>
+                              <p class="text-muted">{{ user_info.alamat }}</p>
+                            </div>
+                            <div class="col-6 mb-3">
+                              <h6>No.Hp</h6>
+                              <p class="text-muted">{{ user_info.nomorHp }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
 
     </div>
