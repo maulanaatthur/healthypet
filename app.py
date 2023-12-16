@@ -298,6 +298,29 @@ def user(username):
         return render_template("profile.html", user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+    
+@app.route("/update_profile", methods=["POST"])
+def save_img():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        username = payload["id"]
+        name_receive = request.form["name_give"]
+        about_receive = request.form["about_give"]
+        alamat_receive = request.form["alamat_give"]
+        new_doc = {"profile_name": name_receive, "profile_info": about_receive , "alamat":alamat_receive}
+        if "file_give" in request.files:
+            file = request.files["file_give"]
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"profile_pics/{username}.{extension}"
+            file.save("./static/" + file_path)
+            new_doc["profile_pic"] = filename
+            new_doc["profile_pic_real"] = file_path
+        db.users.update_one({"username": payload["id"]}, {"$set": new_doc})
+        return jsonify({"result": "success", "msg": "Profile updated!"})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 
@@ -314,7 +337,7 @@ def pesanan():
     return render_template('riwayat_obat.html')
 
 
-# @app.route('/detail', methods=['GET', 'POST'])
+# @app.route('/detaia', methods=['GET', 'POST'])
 # def detail():
 #     if request.method == 'POST':
 #         # Handle POST Request here
