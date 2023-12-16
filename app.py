@@ -235,6 +235,7 @@ def detail():
             result=result
         )
 
+<<<<<<< HEAD
 @app.route('/detail_testing', methods=['POST'])
 def detail():
     id_receive = request.form.get('id_give')
@@ -244,6 +245,8 @@ def detail():
             'detail_pesan_obat.html',
             result=result
         )
+=======
+>>>>>>> parent of f1306d3 (debugging pesan_obat.html)
 
 @app.route("/delete", methods=["POST"])
 def delete():
