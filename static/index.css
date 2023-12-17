@@ -168,7 +168,7 @@
         a:hover:after {
             width: 100%;
             left: 0;
-            background-color: blue;
+            /* background-color: black; */
         }
 
         .history-image img {
@@ -180,25 +180,31 @@
             /* Tambahkan shadow untuk efek ketinggian */
         }
 
-         .history-container {
+        .history-container {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: space-between;
             margin-bottom: 30px;
+            align-items: center;
+            text-align: center;
         }
 
         /* Tambahkan gaya untuk history-image */
         .history-image {
             flex: 1;
             margin-right: 20px;
+            height: auto;
+            width: 25%;
         }
 
-         /* Tambahkan gaya untuk history-description */
+
+        /* Tambahkan gaya untuk history-description */
         .history-description {
             flex: 2;
+            margin-top: 20px;
         }
 
-         .content {
+        .content {
             flex: 1;
             padding: 20px;
         }
@@ -215,8 +221,30 @@
             margin-top: 20px;
         }
 
+        .contact-info i {
+            margin-right: 8px;
+            /* Jarak antara ikon dan teks */
+            transition: color 0.3s ease;
+            /* Efek transisi warna */
+        }
+
+        .contact-info i:hover {
+            color: #f39c12;
+            /* Warna ikon saat dihover */
+        }
+
         .cta-button {
             margin-top: 30px;
         }
 
-        
+        .address-info i {
+            margin-right: 8px;
+            /* Jarak antara ikon dan teks */
+            transition: color 0.3s ease;
+            /* Efek transisi warna */
+        }
+
+        .address-info i:hover {
+            color: #f39c12;
+            /* Warna ikon saat dihover */
+        }
