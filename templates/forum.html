@@ -137,13 +137,12 @@
 
         a.level-item.is-sparta {
             color: #f39c12;
-            /* color: red; */
         }
 
         a.level-item.is-sparta:hover {
             color: #e08e0b;
         }
-        
+
 
         /* .icon.is-small i.fa-heart-o{
             border: 1px solid #f39c12;
@@ -210,27 +209,27 @@
         }
 
         function get_posts(username) {
-    if (username === undefined) {
-        username = '';
+            if (username === undefined) {
+                username = '';
 
-    }
-    $('#post-box').empty();
-    $.ajax({
-        type: 'GET',
-        url: `/get_posts?username_give=${username}`,
-        data: {},
-        success: function (response) {
-            if (response['result'] === 'success') {
-                console.log(response)
-                let posts = response['posts'];
-                for (let i = 0; i < posts.length; i++) {
-                    let post = posts[i];
-                    let time_post = new Date(post['date']);
-                    let time_before = time2str(time_post);
-                    let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o";
-                    let class_star = post['star_by_me'] ? "fa-star" : "fa-star-o";
-                    let class_thumbsup = post['thumbsup_by_me'] ? "fa-thumbs-up" : "fa-thumbs-o-up";
-                    let html_temp = `
+            }
+            $('#post-box').empty();
+            $.ajax({
+                type: 'GET',
+                url: `/get_posts?username_give=${username}`,
+                data: {},
+                success: function (response) {
+                    if (response['result'] === 'success') {
+                        console.log(response)
+                        let posts = response['posts'];
+                        for (let i = 0; i < posts.length; i++) {
+                            let post = posts[i];
+                            let time_post = new Date(post['date']);
+                            let time_before = time2str(time_post);
+                            let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o";
+                            let class_star = post['star_by_me'] ? "fa-star" : "fa-star-o";
+                            let class_thumbsup = post['thumbsup_by_me'] ? "fa-thumbs-up" : "fa-thumbs-o-up";
+                            let html_temp = `
                              <div class="box" id="${post['_id']}">
                 <article class="media">
                     <div class="media-left">
@@ -242,9 +241,11 @@
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>${post['nama_lengkap']}</strong><small>@${post['username']}</small>
-                                <small>${time_before}</small>
+                                <strong>${post['nama_lengkap']}</strong>
                                 <br>
+                                <small>@${post['username']}</small> dalam <small>${time_before}</small>
+                                </p>
+                                <p>
                                 ${post['comment']}
                             </p>
                         </div>
@@ -276,12 +277,12 @@
                 </article>
             </div>
                             `;
-                    $('#post-box').append(html_temp);
+                            $('#post-box').append(html_temp);
+                        }
+                    }
                 }
-            }
+            });
         }
-    });
-}
 
         function toggle_like(post_id, type) {
             console.log(post_id, type);
@@ -408,8 +409,8 @@
         }
 
         $(document).ready(function () {
-    get_posts()
-});
+            get_posts()
+        });
     </script>
 </head>
 
@@ -443,11 +444,11 @@
                             <a class="nav-link" href="/about">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Profil</a>
+                            <a class="nav-link" href="/login">Login</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="/profile/{{ user_info.username }}">Profil</a>
-                        </li>
+                        </li> -->
                     </div>
                 </div>
 
