@@ -294,6 +294,14 @@ def about():
 def forum():
     return render_template('forum.html')
 
+@app.route("/artikel")
+def artikel():
+    return render_template('artikel.html')
+
+@app.route("/obat")
+def obat():
+    return render_template('baca_artikel.html')
+
 
 @app.route("/profile/<username>", methods=["GET"])
 def user(username):
@@ -328,7 +336,6 @@ def save_img():
         return jsonify({"result": "success", "msg": "Profile updated!"})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
 
 
 @app.route("/mulaikonsultasi")
