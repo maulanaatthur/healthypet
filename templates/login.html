@@ -75,11 +75,9 @@
                     username_give: username,
                     password_give: password,
                 },
-                xhrFields: {
-                    withCredentials: true  // Izinkan kuki
-                },
                 success: function (response) {
                     if (response["result"] === "success") {
+                        // $.cookie("mytoken", response["token"], { path: "/" });
                         window.location.replace("/");
                     } else {
                         alert(response["msg"]);

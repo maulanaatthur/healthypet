@@ -36,6 +36,9 @@ def home():
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired!'
         return redirect(url_for('login', msg=msg))
+    except jwt.exceptions.DecodeError:
+        msg = 'There was a problem logging you in'
+        return redirect(url_for('login', msg=msg))
     
 
 @app.route("/login", methods=['GET'])
@@ -51,6 +54,33 @@ def register():
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
     # Sign in
+    # username_receive = request.form["username_give"]
+    # password_receive = request.form["password_give"]
+    # pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
+    # result = db.users.find_one(
+    #     {
+    #         "username": username_receive,
+    #         "password": pw_hash,
+    #     }
+    # )
+    # if result:
+    #     payload = {
+    #         "id": username_receive,
+    #         "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
+    #     }
+    #     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+    #     response = make_response(
+    #         jsonify({"result": "success", "token": token}),
+    #         200,
+    #     )
+    #     response.headers["Access-Control-Allow-Credentials"] = "true"
+    #     response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"  # Sesuaikan dengan URL Anda
+    #     response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
+        
+    #     return response
+    # else:
+    #    return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
     username_receive = request.form["username_give"]
     password_receive = request.form["password_give"]
     pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
@@ -63,21 +93,26 @@ def sign_in():
     if result:
         payload = {
             "id": username_receive,
+            # the token will be valid for 24 hours
             "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-        response = make_response(
-            jsonify({"result": "success", "token": token}),
-            200,
+        return jsonify(
+            {
+                "result": "success",
+                "token": token,
+            }
         )
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"  # Sesuaikan dengan URL Anda
-        response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
-        
-        return response
+    # Let's also handle the case where the id and
+    # password combination cannot be found
     else:
-       return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
+        return jsonify(
+            {
+                "result": "fail",
+                "msg": "We could not find a user with that id/password combination",
+            }
+        )
 
 
 @app.route("/sign_up/save", methods=["POST"])
@@ -143,14 +178,14 @@ def get_posts():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username_receive = request.args.get('username_give')
+        # print("Received Username:", username_receive)
         if username_receive == '':
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
+            print("All Posts:", posts)
 
         else:
             posts = list(db.posts.find(
                 {'username': username_receive}).sort("date", -1).limit(20))
-        # We should fetch the full list of posts here
-
         for post in posts:
             post["_id"] = str(post["_id"])
             post["count_heart"] = db.likes.count_documents(
@@ -301,7 +336,7 @@ def user(username):
     
 @app.route("/update_profile", methods=["POST"])
 def save_img():
-    token_receive = request.cookies.get(TOKEN_KEY)
+    token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username = payload["id"]
