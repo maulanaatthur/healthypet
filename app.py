@@ -22,21 +22,20 @@ db = client.dbsparta_finalproject
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
+TOKEN_KEY = "mytoken"
+
+
+@app.route("/", methods=["GET"])
 def home():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
-        payload = jwt.decode(
-            token_receive,
-            SECRET_KEY,
-            algorithms=['HS256'],
-        )
-        user_info = db.users.find_one({'username': payload.get('id')})
-        return render_template('index.html', user_info=user_info)
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload.get("id")})
+        return render_template("index.html", user_info=user_info)
     except jwt.ExpiredSignatureError:
-        msg = 'Your token has expired!'
-        return redirect(url_for('login', msg=msg))
-    
+        return redirect(url_for("login", msg="Your token has expired"))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="There was problem logging you in"))
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -63,21 +62,26 @@ def sign_in():
     if result:
         payload = {
             "id": username_receive,
+            # the token will be valid for 24 hours
             "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-        response = make_response(
-            jsonify({"result": "success", "token": token}),
-            200,
+        return jsonify(
+            {
+                "result": "success",
+                "token": token,
+            }
         )
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"  # Sesuaikan dengan URL Anda
-        response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
-        
-        return response
+    # Let's also handle the case where the id and
+    # password combination cannot be found
     else:
-       return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
+        return jsonify(
+            {
+                "result": "fail",
+                "msg": "We could not find a user with that id/password combination",
+            }
+        )
 
 
 @app.route("/sign_up/save", methods=["POST"])
@@ -111,7 +115,7 @@ def sign_up():
 
 @app.route("/posting", methods=['POST'])
 def posting():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(
             token_receive,
@@ -139,7 +143,7 @@ def posting():
 
 @app.route("/get_posts", methods=["GET"])
 def get_posts():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username_receive = request.args.get('username_give')
@@ -193,7 +197,7 @@ def get_posts():
 
 @app.route("/update_like", methods=["POST"])
 def update_like():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         # We should change the like count for the post here
@@ -230,11 +234,14 @@ def detail():
     id_receive = request.form.get('id_give')
     result = db.obat.find_one({'id': int(id_receive)})
     if result:
-        return render_template(
-            'detail_pesan_obat.html',
+        return url_for(("detail_pesan"),
             result=result
         )
+        
 
+@app.route('/detail_pesan', methods=['POST'])
+def detail_pesan():
+        return render_template('detail_pesan_obat.html')
 
 @app.route("/delete", methods=["POST"])
 def delete():
@@ -290,7 +297,7 @@ def forum():
 
 @app.route("/profile/<username>", methods=["GET"])
 def user(username):
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         status = username == payload.get("id")
