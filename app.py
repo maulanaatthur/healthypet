@@ -22,24 +22,20 @@ db = client.dbsparta_finalproject
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
+TOKEN_KEY = "mytoken"
+
+
+@app.route("/", methods=["GET"])
 def home():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
-        payload = jwt.decode(
-            token_receive,
-            SECRET_KEY,
-            algorithms=['HS256'],
-        )
-        user_info = db.users.find_one({'username': payload.get('id')})
-        return render_template('index.html', user_info=user_info)
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload.get("id")})
+        return render_template("index.html", user_info=user_info)
     except jwt.ExpiredSignatureError:
-        msg = 'Your token has expired!'
-        return redirect(url_for('login', msg=msg))
+        return redirect(url_for("login", msg="Your token has expired"))
     except jwt.exceptions.DecodeError:
-        msg = 'There was a problem logging you in'
-        return redirect(url_for('login', msg=msg))
-    
+        return redirect(url_for("login", msg="There was problem logging you in"))
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -54,33 +50,6 @@ def register():
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
     # Sign in
-    # username_receive = request.form["username_give"]
-    # password_receive = request.form["password_give"]
-    # pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
-    # result = db.users.find_one(
-    #     {
-    #         "username": username_receive,
-    #         "password": pw_hash,
-    #     }
-    # )
-    # if result:
-    #     payload = {
-    #         "id": username_receive,
-    #         "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
-    #     }
-    #     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-
-    #     response = make_response(
-    #         jsonify({"result": "success", "token": token}),
-    #         200,
-    #     )
-    #     response.headers["Access-Control-Allow-Credentials"] = "true"
-    #     response.headers["Access-Control-Allow-Origin"] = "http://localhost:5000"  # Sesuaikan dengan URL Anda
-    #     response.headers["Set-Cookie"] = f"mytoken={token}; Path=/; HttpOnly; SameSite=None; Secure"
-        
-    #     return response
-    # else:
-    #    return make_response(jsonify({"result": "fail", "msg": "Username/password combination not found"}), 401)
     username_receive = request.form["username_give"]
     password_receive = request.form["password_give"]
     pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
@@ -146,19 +115,23 @@ def sign_up():
 
 @app.route("/posting", methods=['POST'])
 def posting():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(
             token_receive,
             SECRET_KEY,
             algorithms=['HS256']
         )
+        print("Payload ID:", payload.get('id'))
         user_info = db.users.find_one({'username': payload.get('id')})
+        print("User Info:", user_info)
+        # username = db.users.find_one({userna})
         comment_receive = request.form.get('comment_give')
         date_receive = request.form.get('date_give')
         doc = {
             'username': user_info.get('username'),
             'profile_name': user_info.get('profile_name'),
+            "nama_lengkap" : user_info.get("nama"),
             'profile_pic_real': user_info.get('profile_pic_real'),
             'comment': comment_receive,
             'date': date_receive,
@@ -174,18 +147,18 @@ def posting():
 
 @app.route("/get_posts", methods=["GET"])
 def get_posts():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username_receive = request.args.get('username_give')
-        # print("Received Username:", username_receive)
         if username_receive == '':
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
-            print("All Posts:", posts)
 
         else:
             posts = list(db.posts.find(
                 {'username': username_receive}).sort("date", -1).limit(20))
+        # We should fetch the full list of posts here
+
         for post in posts:
             post["_id"] = str(post["_id"])
             post["count_heart"] = db.likes.count_documents(
@@ -228,7 +201,7 @@ def get_posts():
 
 @app.route("/update_like", methods=["POST"])
 def update_like():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         # We should change the like count for the post here
@@ -265,11 +238,14 @@ def detail():
     id_receive = request.form.get('id_give')
     result = db.obat.find_one({'id': int(id_receive)})
     if result:
-        return render_template(
-            'detail_pesan_obat.html',
+        return url_for(("detail_pesan"),
             result=result
         )
+        
 
+@app.route('/detail_pesan', methods=['POST'])
+def detail_pesan():
+        return render_template('detail_pesan_obat.html')
 
 @app.route("/delete", methods=["POST"])
 def delete():
@@ -325,7 +301,7 @@ def forum():
 
 @app.route("/profile/<username>", methods=["GET"])
 def user(username):
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         status = username == payload.get("id")
@@ -336,7 +312,7 @@ def user(username):
     
 @app.route("/update_profile", methods=["POST"])
 def save_img():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username = payload["id"]
