@@ -298,6 +298,10 @@ def forum():
 def artikel():
     return render_template('artikel.html')
 
+@app.route("/baca_artikel")
+def baca_artikel():
+    return render_template('baca_artikel.html')
+
 @app.route("/obat")
 def obat():
     return render_template('baca_artikel.html')
