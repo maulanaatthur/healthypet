@@ -137,11 +137,17 @@
 
         a.level-item.is-sparta {
             color: #f39c12;
+            /* color: red; */
         }
 
         a.level-item.is-sparta:hover {
             color: #e08e0b;
         }
+        
+
+        /* .icon.is-small i.fa-heart-o{
+            border: 1px solid #f39c12;
+        } */
 
         */ footer {
             background-color: #3498db;
@@ -152,17 +158,17 @@
     </style>
     <title>Hello All</title>
     <script>
-        $(document).ready(function () {
-            // Tangani pengiriman formulir
-            $("#formDiskusi").submit(function (event) {
-                // event.preventDefault();
-                // // Lakukan tindakan pengiriman formulir di sini
-                // // Misalnya, kirim data menggunakan AJAX atau jalankan fungsi JavaScript lainnya
-                // // Setelah itu, tutup modal
-                // $('#formDiskusiModal').modal('hide');
-                get_posts()
-            });
-        });
+        // $(document).ready(function () {
+        //     // Tangani pengiriman formulir
+        //     $("#formDiskusi").submit(function (event) {
+        //         // event.preventDefault();
+        //         // // Lakukan tindakan pengiriman formulir di sini
+        //         // // Misalnya, kirim data menggunakan AJAX atau jalankan fungsi JavaScript lainnya
+        //         // // Setelah itu, tutup modal
+        //         // $('#formDiskusiModal').modal('hide');
+        //         get_posts();
+        //     });
+        // });
 
         function post() {
             let comment = $('#textarea-post').val();
@@ -178,7 +184,7 @@
                     console.log(response);
                     // $('#formDiskusiModal').removeClass('is-active');
                     window.location.reload();
-                    updatePageWithNewPost(response.post);
+                    // updatePageWithNewPost(response.post);
                 }
             });
         }
@@ -204,68 +210,78 @@
         }
 
         function get_posts(username) {
-            if (username === undefined) {
-                username = "";
-            }
-            // $("#post-box").empty();
-            $.ajax({
-                type: "GET",
-                url: '/get_posts?username_give=${username}',
-                data: {},
-                success: function (response) {
-                    if (response["result"] === "success") {
-                        let posts = response["posts"];
-                        for (let i = 0; i < posts.length; i++) {
-                            let post = posts[i];
-                            let time_post = new Date(post["date"]);
-                            let time_before = time2str(time_post);
-                            let class_heart = post["heart_by_me"] ? "fa-heart" : "fa-heart-o";
-                            let class_star = post["star_by_me"] ? "fa-star" : "fa-star-o";
-                            let class_thumbsup = post["thumbsup_by_me"]
-                                ? "fa-thumbs-up"
-                                : "fa-thumbs-o-up";
-                            // if(post['heart_by_me']){
-                            //   class_heart = 'fa-heart';
-                            // }else {
-                            //   class_heart = 'fa-heart-o'
-                            // }
-                            let html_temp = `
-              <div class="box">
+    if (username === undefined) {
+        username = '';
+
+    }
+    $('#post-box').empty();
+    $.ajax({
+        type: 'GET',
+        url: `/get_posts?username_give=${username}`,
+        data: {},
+        success: function (response) {
+            if (response['result'] === 'success') {
+                console.log(response)
+                let posts = response['posts'];
+                for (let i = 0; i < posts.length; i++) {
+                    let post = posts[i];
+                    let time_post = new Date(post['date']);
+                    let time_before = time2str(time_post);
+                    let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o";
+                    let class_star = post['star_by_me'] ? "fa-star" : "fa-star-o";
+                    let class_thumbsup = post['thumbsup_by_me'] ? "fa-thumbs-up" : "fa-thumbs-o-up";
+                    let html_temp = `
+                             <div class="box" id="${post['_id']}">
                 <article class="media">
                     <div class="media-left">
-                        <a class="image is-64x64" href="#">
-                            <img class="is-rounded" src={{ url_for("static", filename="profile_pics/bg.jpg" ) }}
-                                alt="Image">
+                        <a href="/profile/${post['username']}" class="image is-64x64">
+                            <img src="/static/${post['profile_pic_real']}"
+                                alt="image" class="is-rounded">
                         </a>
                     </div>
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>${post['profile_name']}</strong> <small>${post['username']}</small> <small>10분 전</small>
+                                <strong>${post['nama_lengkap']}</strong><small>@${post['username']}</small>
+                                <small>${time_before}</small>
                                 <br>
                                 ${post['comment']}
                             </p>
                         </div>
                         <nav class="level is-mobile">
                             <div class="level-left">
-                                <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('', 'heart')">
-                                    <span class="icon is-small"><i class="fa fa-thumbs-up"
-                                            aria-hidden="true"></i></span>&nbsp;<span class="like-num">2.7k</span>
+                                <a href="" class="level-item is-sparta " aria-label="heart"
+                                    onclick="toggle_like('${post["_id"]}', 'heart')">
+                                    <span class="icon is-small ${post['heart_by_me'] ? 'has-text-danger has-background-warning' : 'has-background-warning'}"><i class="fa ${class_heart}" aria-hidden="true"></i></span>&nbsp;
+                                    <span class="like-num">${num2str(post["count_heart"])}</span>
+
+                                </a>
+
+                                <a href="" class="level-item is-sparta" aria-label="star"
+                                    onclick="toggle_star('${post["_id"]}', 'star')">
+                                    <span class="icon is-smal" ><i class="fa ${class_star}"  aria-hidden="true"></i></span>&nbsp;
+                                    <span class="like-num has-text-warning">${num2str(post["count_star"])}</span>
+
+                                </a>
+
+                                <a href="" class="level-item is-sparta" aria-label="thumbsup"
+                                    onclick="toggle_thumbsup('${post["_id"]}', 'thumbsup')">
+                                    <span class="icon is-small"><i class="fa ${class_thumbsup}" aria-hidden="true"></i></span>&nbsp;
+                                    <span class="like-num">${num2str(post["count_thumbsup"])}</span>
+
                                 </a>
                             </div>
-
-
                         </nav>
                     </div>
                 </article>
             </div>
-            `;
-                            $("#post-box").append(html_temp);
-                        }
-                    }
-                },
-            });
+                            `;
+                    $('#post-box').append(html_temp);
+                }
+            }
         }
+    });
+}
 
         function toggle_like(post_id, type) {
             console.log(post_id, type);
@@ -390,6 +406,10 @@
                 });
             }
         }
+
+        $(document).ready(function () {
+    get_posts()
+});
     </script>
 </head>
 
@@ -424,6 +444,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">Profil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile/{{ user_info.username }}">Profil</a>
                         </li>
                     </div>
                 </div>

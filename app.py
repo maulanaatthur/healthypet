@@ -122,12 +122,16 @@ def posting():
             SECRET_KEY,
             algorithms=['HS256']
         )
+        print("Payload ID:", payload.get('id'))
         user_info = db.users.find_one({'username': payload.get('id')})
+        print("User Info:", user_info)
+        # username = db.users.find_one({userna})
         comment_receive = request.form.get('comment_give')
         date_receive = request.form.get('date_give')
         doc = {
             'username': user_info.get('username'),
             'profile_name': user_info.get('profile_name'),
+            "nama_lengkap" : user_info.get("nama"),
             'profile_pic_real': user_info.get('profile_pic_real'),
             'comment': comment_receive,
             'date': date_receive,
