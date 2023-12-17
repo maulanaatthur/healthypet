@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
@@ -89,29 +91,29 @@
             let password = inputpassword.val();
             let password2 = inputpassword2.val();
 
-            if (nama === ""){
+            if (nama === "") {
                 alert("Masukkan nama lengkap Anda!");
                 return false;
             }
 
-            if (username === ""){
+            if (username === "") {
                 alert("Masukkan username Anda!");
                 return;
             }
 
-            if(alamat===""){
+            if (alamat === "") {
                 alert("Masukkan alamat Anda!");
                 return;
             }
 
-            if(nomorhp===""){
+            if (nomorhp === "") {
                 alert("Masukkan info kontak anda")
             }
-            
-            if (password === "" || password2===""){
+
+            if (password === "" || password2 === "") {
                 alert("Masukkan Password anda!");
                 return;
-            } else if (password != password2){
+            } else if (password != password2) {
                 alert("Password tidak sesuai");
                 return;
             }

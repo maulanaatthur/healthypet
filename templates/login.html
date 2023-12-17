@@ -21,64 +21,86 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
     <title>Hello All</title>
-     <style>
+    <style>
         body {
             background-image: url('static/bg.jpg');
             background-size: cover;
             background-position: center;
             height: 100vh;
             margin: 0;
-            color: black; /* Change text color to contrast with background */
+            color: black;
+            /* Change text color to contrast with background */
         }
 
         .login-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 80vh; /* Adjust the height as needed */
+            height: 80vh;
+            /* Adjust the height as needed */
         }
 
         .login-form {
-            background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Add a semi-transparent white background */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 300px; /* Atur lebar untuk membuat formulir persegi */
-            margin: auto; /* Posisikan formulir di tengah secara horizontal */
+            width: 300px;
+            /* Atur lebar untuk membuat formulir persegi */
+            margin: auto;
+            /* Posisikan formulir di tengah secara horizontal */
         }
 
-          .login-btn {
-            
-            width: 100%; /* Buat tombol mengambil lebar penuh formulir */
+        .login-btn {
+
+            width: 100%;
+            /* Buat tombol mengambil lebar penuh formulir */
         }
     </style>
 
     <script>
-         function sign_in() {
-        event.preventDefault();  // Tambahkan baris ini untuk mencegah formulir dikirim
-        let username = $("#username").val();
-        let password = $("#password").val();
-        $.ajax({
-            type: "POST",
-            url: "/sign_in",
-            data: {
-                username_give: username,
-                password_give: password,
-            },
-            xhrFields: {
-                withCredentials: true  // Izinkan kuki
-            },
-            success: function (response) {
-                if (response["result"] === "success") {
-                    window.location.replace("/");
-                } else {
-                    alert(response["msg"]);
-                }
-            },
-        });
-    }
+        function sign_in() {
+            event.preventDefault();  // Tambahkan baris ini untuk mencegah formulir dikirim
+            let username = $("#username").val();
+            let password = $("#password").val();
+            if (username === "") {
+                $("#help-id-login").text("Please input your id.");
+                $("#input-username").focus();
+                return;
+              } else {
+                $("#help-id-login").text("");
+              }
+        
+              if (password === "") {
+                $("#help-password-login").text("Please input your password.");
+                $("#input-password").focus();
+                return;
+              } else {
+                $("#help-password-login").text("");
+              }
+              console.log(username, password);
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                success: function (response) {
+                    if (response["result"] === "success") {
+                        $.cookie("mytoken", response["token"], { path: "/" });
+                        window.location.replace("/");
+                    } else {
+                        alert(response["msg"]);
+                    }
+                },
+            });
+        }
     </script>
 </head>
 
