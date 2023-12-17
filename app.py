@@ -24,7 +24,6 @@ app = Flask(__name__)
 
 TOKEN_KEY = "mytoken"
 
-
 @app.route("/", methods=["GET"])
 def home():
     token_receive = request.cookies.get(TOKEN_KEY)
@@ -229,19 +228,43 @@ def produk():
         return render_template('pesan_obat.html')
     return render_template('pesan_obat.html')
 
-@app.route('/detail', methods=['POST'])
-def detail():
-    id_receive = request.form.get('id_give')
-    result = db.obat.find_one({'id': int(id_receive)})
-    if result:
-        return url_for(("detail_pesan"),
-            result=result
-        )
-        
+# @app.route('/pesan', methods=['GET'])
+# def pesan():
+#     token_receive = request.cookies.get(TOKEN_KEY)
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+#         user_info = db.users.find_one({"username": payload["id"]})
+#         id_receive = request.form.get('id_give')
+#         result = db.obat.find_one({'id': id_receive})
+#         return redirect(url_for("detail",result=result,user_info=user_info))
+#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+#         return redirect(url_for("home"))
 
-@app.route('/detail_pesan', methods=['POST'])
-def detail_pesan():
-        return render_template('detail_pesan_obat.html')
+@app.route('/detail_get', methods=['POST'])
+def detail_get():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload["id"]})
+        id_receive = request.form.get('id_give')
+        return redirect(url_for("detail", id_receive=id_receive))
+        # return render_template("detail.html" , result=result , user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+@app.route("/detail")
+def detail():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload["id"]})
+        id_receive = request.args.get(id_receive)
+        result = db.obat.find_one({'id': int(id_receive)})
+        return render_template('detail.html' , user_info=user_info , result=result)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+        
 
 @app.route("/delete", methods=["POST"])
 def delete():

@@ -78,7 +78,7 @@
                     </div>
                     <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
                         <div class="d-flex gap-2">
-                            <button type="button" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button" onclick="pesan(${id})">Beli Sekarang</button>
+                            <button type="button" onclick="pesan(${id})" data-id="648efaa6bc28dc439cddf6d3" class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
                             <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi_648efaa6bc28dc439cddf6d3">Deskripsi</button>
 
                         </div>
@@ -115,13 +115,14 @@
        function pesan(id) {
         $.ajax({
           type: "POST",
-          url: "/detail",
+          url: "/detail_get",
           data: { id_give:id },
           success: function (response) {
-            console.log(response);
+            console.log(response)
           },
         });
       }
+
 
       </script>
 
