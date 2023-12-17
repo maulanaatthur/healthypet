@@ -298,6 +298,18 @@ def about():
 def forum():
     return render_template('forum.html')
 
+@app.route("/artikel")
+def artikel():
+    return render_template('artikel.html')
+
+@app.route("/baca_artikel")
+def baca_artikel():
+    return render_template('baca_artikel.html')
+
+@app.route("/obat")
+def obat():
+    return render_template('baca_artikel.html')
+
 
 @app.route("/profile/<username>", methods=["GET"])
 def user(username):
@@ -312,7 +324,7 @@ def user(username):
     
 @app.route("/update_profile", methods=["POST"])
 def save_img():
-    token_receive = request.cookies.get(TOKEN_KEY)
+    token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username = payload["id"]
@@ -332,7 +344,6 @@ def save_img():
         return jsonify({"result": "success", "msg": "Profile updated!"})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
 
 
 @app.route("/mulaikonsultasi")
