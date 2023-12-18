@@ -22,75 +22,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
     <title>Hello All</title>
-    <!-- <style>
-        .history-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        /* Tambahkan gaya untuk history-image */
-        .history-image {
-            flex: 1;
-            margin-right: 20px;
-        }
-
-        .history-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            /* Tambahkan border-radius untuk sudut yang lebih lembut */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Tambahkan shadow untuk efek ketinggian */
-        }
-
-        /* Tambahkan gaya untuk history-description */
-        .history-description {
-            flex: 2;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .about-section {
-            margin-bottom: 40px;
-        }
-
-        .about-section h2 {
-            color: #007bff;
-        }
-
-        .contact-info {
-            margin-top: 20px;
-        }
-
-        .cta-button {
-            margin-top: 30px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style> -->
 </head>
 
 <body>
@@ -125,6 +59,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="">Profil</a>
                         </li>
+
                     </div>
                 </div>
 
@@ -143,14 +78,14 @@
                 berkomitmen untuk memberikan solusi terbaik untuk kesehatan dan kesejahteraan hewan kesayangan Anda.
             </p>
             <div class="cta-button">
-                <a href="/mulaikonsultasi" class="btn btn-warning">Mulai Konsultasi</a>
+                <a href="/forum" class="btn btn-warning">Mulai Konsultasi</a>
             </div>
         </div>
     </section>
     <section class="content">
         <div class="container">
             <div class="about-section">
-                <h2>Sejarah Perusahaan</h2>
+                <h2 style="text-align: center; padding-top: 0.5rem; padding-bottom: 1rem;">Sejarah Perusahaan</h2>
                 <div class="history-container">
                     <div class="history-image">
                         <img src="/static/bg.jpg" alt="History Image">
@@ -165,7 +100,7 @@
                 </div>
             </div>
             <div class="about-section">
-                <h2>Visi dan Misi</h2>
+                <h2 style="text-align: center;">Visi dan Misi</h2>
                 <p>
                     <strong>Visi:</strong> Menjadi pemimpin dalam layanan kesehatan hewan berbasis digital.
                     <br>
@@ -176,22 +111,32 @@
             <div class="about-section">
                 <h2>Kontak</h2>
                 <div class="contact-info">
-                    <p><strong>Email:</strong> info@healthypet.com</p>
-                    <p><strong>Telepon:</strong> +1 123 456 789</p>
+                    <p>
+                        <strong>Email:</strong>
+                        <i class="fas fa-envelope"></i> info@healthypet.com
+                    </p>
+                    <p>
+                        <strong>Telepon:</strong>
+                        <i class="fas fa-phone-alt"></i> +1 123 456 789
+                    </p>
                 </div>
             </div>
 
             <div class="about-section">
                 <h2>Alamat</h2>
-                <p>Jl. Jendral Sudirman No. 123, Kota Anda</p>
+                <div class="address-info">
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Jl. Jendral Sudirman No. 123, Kota Anda
+                    </p>
+                </div>
             </div>
-    </section>
-    </div>
+
 
     <footer class="copyright mt-0">
-        <div class="container py-2">
-            <p class="text-center my-3">Copyright © by Kelompok 4</p>
-        </div>
+                <div class="container py-2">
+                    <p class="text-center my-3">Copyright © by Kelompok 4</p>
+                </div>
     </footer>
 </body>
 
