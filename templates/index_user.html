@@ -26,11 +26,6 @@
     <link rel="stylesheet" href="{{url_for("static", filename='index.css' )}}">
     <title>Hello All</title>
     <script>
-        function sign_out() {
-            $.removeCookie("mytoken", { path: "/" });
-            alert("Signed out!");
-            window.location.href = "/login";
-          }
 
     </script>
 
@@ -65,8 +60,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/about">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/profile/{{ user_info.username }}">{{ user_info.username }}</a>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/profile/{{ user_info.username }}">Profil</a>
                         </li>
                     </div>
                 </div>
@@ -86,7 +81,7 @@
             <div class="col">
                 <p class="lead mb-4 text-white ">Solusi untuk kesehatan pet kesayanganmu!</p>
                 <div class="mt-5">
-                    <a href="/forum" class="btn btn-outline-light btn-lg px-4">Ayo bergabung dengan kami` </a>
+                    <a href="/login" class="btn btn-outline-light btn-lg px-4">Ayo bergabung dengan kami` </a>
                 </div>
             </div>
         </div>
@@ -104,12 +99,12 @@
 
                 <div class="col">
                     <div class="card shadow h-100 pb-3">
-                        <img src="/static/administrator/assets/image/article-2023-06-18-21-43-12.jpg"
+                        <img src="/static/artikel_pics/artikel-3.jpg"
                             class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">Mengenal Macam-Macam Perawatan Wajah di Dokter Kulit
+                            <h5 class="card-title">Waspadai Berbagai Penyakit Infeksi dari Hewan Peliharaan
                             </h5>
-                            <p class="card-text">lorem ipsum</p>
+                            <p class="card-text">Hewan peliharaan terbukti dapat memberikan banyak manfaat bagi pemiliknya. Namun, Anda tetap perlu waspada karena ada penyakit infeksi dari hewan peliharaan yang dapat mengintai Anda dan keluarga..</p>
                         </div>
                         <div class="card-footer" style="border: none; background-color: transparent;">
                             <a href="/artikel/648f180070da89d146a0cd9a" class="btn btn-primary">Read More</a>
@@ -119,16 +114,12 @@
 
                 <div class="col">
                     <div class="card shadow h-100 pb-3">
-                        <img src="/static/administrator/assets/image/article-2023-06-18-21-29-37.jpg"
+                        <img src="/static/artikel_pics/artikel-1.jpg"
                             class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">7 Pantangan Penderita Jantung Bengkak yang Harus Diketahui
+                            <h5 class="card-title">Cara Sederhana Meningkatkan Kesehatan Hewan Peliharaan Anda
                             </h5>
-                            <p class="card-text">Jantung bengkak adalah pembengkakan pada jantung yang membuat ukurannya
-                                menjadi lebih besar dari ukuran normal. Kondisi ini bukanlah suatu penyakit, melainkan
-                                merupakan salah satu tanda penyerta dari suatu penyakit jantung.
-
-                                Jantung bengkak dapat d....</p>
+                            <p class="card-text">Memiliki hewan peliharaan membawa kebahagiaan dan tanggung jawab. Agar hewan peliharaan tetap sehat dan bahagia, berikut adalah beberapa cara sederhana yang dapat Anda terapkan..</p>
                         </div>
                         <div class="card-footer" style="border: none; background-color: transparent;">
                             <a href="/artikel/648f14d270da89d146a0cd99" class="btn btn-primary">Read More</a>
@@ -138,15 +129,12 @@
 
                 <div class="col">
                     <div class="card shadow h-100 pb-3">
-                        <img src="/static/administrator/assets/image/article-2023-06-18-21-03-23.jpg"
+                        <img src="/static/artikel_pics/artikel-2.jpg"
                             class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">Kenali Penyebab Sakit Perut Sebelah Kiri &amp; Cara Mengatasinya
+                            <h5 class="card-title">Mengenal Jenis Hewan Peliharaan Beserta Cara Merawatnya
                             </h5>
-                            <p class="card-text">Sakit perut sebelah kiri bisa disebabkan oleh berbagai faktor.
-                                Mengingat perut sebelah kiri merupakan lokasi berkumpulnya organ penting, seperti ginjal
-                                kiri, pankreas, usus besar (kolon), limpa, sebagian kecil lambung, kelenjar adrenal dan
-                                bagian kir....</p>
+                            <p class="card-text">Apakah Anda termasuk pecinta hewan? Tertarik untuk mengadopsi hewan peliharaan? Jika masih bingung untuk memelihara hewan apa yang cocok untuk anda, maka kamu bisa simak artikel ini Lovers..</p>
                         </div>
                         <div class="card-footer" style="border: none; background-color: transparent;">
                             <a href="/artikel/648f0eab70da89d146a0cd98" class="btn btn-primary">Read More</a>
@@ -158,7 +146,7 @@
     </section>
     <footer class="copyright mt-0">
         <div class="container py-2">
-            <p class="text-center my-3">Copyright © by Kelompok 3</p>
+            <p class="text-center my-3">Copyright © by Kelompok 4</p>
         </div>
     </footer>
 </body>
