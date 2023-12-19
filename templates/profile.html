@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <link rel="stylesheet" href="{{url_for("static", filename='index.css')}}">
     <title>Profile</title>
 
@@ -40,7 +40,7 @@
             let name = $("#input-name").val();
             let file = $("#input-pic")[0].files[0];
             let about = $("#textarea-about").val();
-            let alamat = $("input-alamat").val();
+            let alamat = $("#input-alamat").val();
             let form_data = new FormData();
             form_data.append("file_give", file);
             form_data.append("name_give", name);
