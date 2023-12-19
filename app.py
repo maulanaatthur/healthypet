@@ -432,7 +432,13 @@ def forum():
 
 @app.route("/artikel")
 def artikel():
-    return render_template('artikel.html')
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload.get("id")})
+        return render_template('artikel.html', user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 @app.route("/baca_artikel")
 def baca_artikel():
@@ -464,6 +470,7 @@ def save_img():
         about_receive = request.form["about_give"]
         alamat_receive = request.form["alamat_give"]
         new_doc = {"profile_name": name_receive, "profile_info": about_receive , "alamat":alamat_receive}
+        print(new_doc)
         if "file_give" in request.files:
             file = request.files["file_give"]
             filename = secure_filename(file.filename)
