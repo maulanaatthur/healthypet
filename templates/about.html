@@ -25,6 +25,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
     <title>Hello All</title>
+    <style>
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+
+        .fadeInUp {
+            animation-name: fadeInUp;
+        }
+    </style>
 </head>
 
 <body>
@@ -57,7 +67,10 @@
                             <a class="nav-link" href="/about">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Profil</a>
+                            <a class="nav-link" href="/profile/{{ user_info.username }}">Profil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/riwayat/{{ user_info.username }}">Pesanan</a>
                         </li>
 
                     </div>
@@ -85,28 +98,37 @@
     <section class="content">
         <div class="container">
             <div class="about-section">
-                <h2 style="text-align: center; padding-top: 0.5rem; padding-bottom: 1rem;">Sejarah Perusahaan</h2>
-                <div class="history-container">
-                    <div class="history-image">
-                        <img src="/static/bg.jpg" alt="History Image">
-                    </div>
-                    <div class="history-description">
-                        <p>
-                            Healthy Pet didirikan pada tahun 2010 oleh sekelompok dokter hewan yang berkomitmen untuk
-                            menyediakan layanan kesehatan terbaik bagi hewan peliharaan. Perjalanan kami dimulai dengan
-                            visi untuk meningkatkan kesehatan dan kesejahteraan hewan peliharaan di seluruh dunia.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="about-section">
-                <h2 style="text-align: center;">Visi dan Misi</h2>
-                <p>
-                    <strong>Visi:</strong> Menjadi pemimpin dalam layanan kesehatan hewan berbasis digital.
-                    <br>
-                    <strong>Misi:</strong> Memberikan solusi terbaik untuk kesehatan dan kesejahteraan hewan peliharaan.
-                </p>
-            </div>
+    <h2 class="animated fadeInUp" style="padding-top: 0.5rem; padding-bottom: 1rem;">Sejarah Perusahaan</h2>
+    <div class="history-container">
+        <div class="history-image">
+            <img src="/static/bg.jpg" alt="History Image">
+        </div>
+        <div class="history-description">
+            <p>
+                <strong>Healthy Pet</strong> didirikan pada tahun 2010 oleh sekelompok dokter hewan yang berkomitmen untuk
+                menyediakan layanan kesehatan terbaik bagi hewan peliharaan. Perjalanan kami dimulai dengan
+                visi untuk meningkatkan kesehatan dan kesejahteraan hewan peliharaan di seluruh dunia.
+            </p>
+            <p>
+                Dengan komitmen kami terhadap inovasi dan teknologi terkini, kami terus berkembang
+                untuk memberikan solusi kesehatan yang unggul. Kami bangga menjadi bagian dari
+                kebahagiaan dan kesehatan hewan kesayangan Anda.
+            </p>
+        </div>
+    </div>
+</div>
+
+          <div class="about-section">
+    <h2 class="animated fadeInUp" style="padding-top: 0.5rem; padding-bottom: 1rem;">Visi dan Misi</h2>
+    <div class="visi-misi">
+        <p>
+            <strong>Visi:</strong> Menjadi pemimpin dalam layanan kesehatan hewan berbasis digital.
+            <br>
+            <strong>Misi:</strong> Memberikan solusi terbaik untuk kesehatan dan kesejahteraan hewan
+            peliharaan.
+        </p>
+    </div>
+</div>
 
             <div class="about-section">
                 <h2>Kontak</h2>
@@ -133,11 +155,11 @@
             </div>
 
 
-    <footer class="copyright mt-0">
+            <footer class="copyright mt-0">
                 <div class="container py-2">
                     <p class="text-center my-3">Copyright © by Kelompok 4</p>
                 </div>
-    </footer>
+            </footer>
 </body>
 
 </html>
