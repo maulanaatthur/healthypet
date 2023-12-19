@@ -141,8 +141,8 @@
                         style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
                         <img src="{{ url_for('static', filename=user_info.profile_pic_real) }}"
                           alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
-                        <h5>{{ user_info.profile_name }}</h5>
-                        <p>@{{ user_info.username }}</p>
+                        <h5 style="color: gray;">{{ user_info.profile_name }}</h5>
+                        <p style="color: gray;">@{{ user_info.username }}</p>
                         <i class="far fa-edit mb-5"></i>
 
 
