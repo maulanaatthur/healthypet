@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config["UPLOAD_FOLDER"] = "./static/profile_pics"
+app.config["UPLOAD_FOLDER"] = "./static"
 
 SECRET_KEY = "SPARTA"
 
@@ -170,6 +170,24 @@ def get_order():
         )
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+    
+@app.route("/order/done", methods=["POST"])
+def order_done():
+    id_receive = request.form['id_give']
+    db.order.update_one(
+        {'id' : int(id_receive) },
+        {'$set' : {'done' : 1}}
+    )
+    return jsonify({'msg': 'Update DONE!'})
+
+@app.route("/order/cancel", methods=["POST"])
+def order_cancel():
+    id_receive = request.form['id_give']
+    db.order.update_one(
+        {'id' : int(id_receive) },
+        {'$set' : {'done' : 0}}
+    )
+    return jsonify({'msg': 'Update DONE!'})
 
 @app.route("/riwayat/<username>", methods=["GET"])
 def riwayat_user(username):
@@ -456,14 +474,13 @@ def user(username):
     
 @app.route("/update_profile", methods=["POST"])
 def save_img():
-    token_receive = request.cookies.get("mytoken")
+    token_receive = request.cookies.get(TOKEN_KEY)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username = payload["id"]
         name_receive = request.form["name_give"]
         about_receive = request.form["about_give"]
-        alamat_receive = request.form["alamat_give"]
-        new_doc = {"profile_name": name_receive, "profile_info": about_receive , "alamat":alamat_receive}
+        new_doc = {"profile_name": name_receive, "profile_info": about_receive}
         if "file_give" in request.files:
             file = request.files["file_give"]
             filename = secure_filename(file.filename)
