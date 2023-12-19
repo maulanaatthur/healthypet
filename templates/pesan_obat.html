@@ -43,35 +43,23 @@
         bsCustomFileInput.init()
        });
        
-       function order(){
-        let produk_title = $('#image-title').val();
-        let produk_cost = $('#image-cost').val();
-        let qty = $("#form1").val();
-
-        let bukti = $('#bukti_pembayaran').prop('files')[0];
-        if(!bukti){
-            return alert("Bukti Kosong")
-        }
-
+       function order(produk_title, produk_cost, qty) {
         let form_data = new FormData();
-
-        form_data.append('file_give', bukti);
         form_data.append('title_give', produk_title);
         form_data.append('cost_give', produk_cost);
         form_data.append('qty_give', qty);
-      
 
         $.ajax({
-          type: 'POST',
-          url: '/order',
-          data: form_data,
-          contentType: false,
-          processData: false,
-          success: function(response){
-            console.log(response);
-            window.location.reload();
-          }
-        });
+            type: 'POST',
+            url: '/order',
+            data: form_data,
+            contentType: false,
+            processData: false,
+            success: function(response){
+              console.log(response);
+              window.location.reload();
+            }
+          });
        }
 
        function listing(){
@@ -101,8 +89,8 @@
                     </div>
                     <div class="card-footer mb-3 px-4" style="border: none; background-color: transparent">
                         <div class="d-flex gap-2">
-                            <button type="button" onclick="pesan(${id})" data-bs-toggle="modal" data-bs-target="#formDiskusiModal${id}"  class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
-                            <button type="button" onclick="desc(${id})" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi${id}">Deskripsi</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#formDiskusiModal${id}"  class="btn btn-primary flex-fill w-100 purchase-button">Beli Sekarang</button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill w-100" data-bs-toggle="modal" data-bs-target="#deskripsi${id}">Deskripsi</button>
 
                         </div>
 
@@ -128,7 +116,8 @@
                     <div class="container h-100 py-5">
                         <div class="row d-flex justify-content-center align-items-center h-100">
                             <div class="col-12 col-md-10">
-                    <h6>${title}</h6>
+                    <input type="hidden" id="title" value="${title}">
+                    <input type="hidden" id="cost" value="${cost}">
                                 <div class="card rounded-3 mb-4">
                                     <div class="card-body p-4">
                                         <div class="row d-flex justify-content-between align-items-center">
@@ -161,15 +150,7 @@
                                     </div>
                                 </div>
                     
-                                <div class="card rounded-3 mb-4">
-                                    <div class="card-body p-4">
-                                        <h5 class="mt-2 mb-4">Upload Bukti Pembayaran</h5>
-                                        <div class="mb-3">
-                                            <input type="file" class="form-control" id="bukti_pembayaran" name="bukti_pembayaran" value="panda.jpg" accept=".png, .jpg, .jpeg" required="">
-                                        </div>
-                    
-                                    </div>
-                                </div>
+
                     
                              
                     
@@ -196,11 +177,9 @@
         
                     <!-- Tambahan elemen textarea lainnya jika diperlukan -->
 
-                    <input type="hidden" id="image-title" name="custId" value="${title}">
-                    <input type="hidden" id="image-cost" name="custId" value="${cost}">
                     <div class="card">
                         <div class="card-body d-flex justify-content-between">
-                            <button type="button" onclick="order()" id="button-pesan" class="btn btn-warning btn-lg me-2 ms-2 flex-grow-1">Pesan</button>
+                            <button type="button" onclick="order('${title}', '${cost}', $('#form1').val())" id="button-pesan" class="btn btn-warning btn-lg me-2 ms-2 flex-grow-1">Pesan</button>
                             <button type="button" id="button-batal" data-bs-dismiss="modal" class="btn btn-danger btn-lg ms-2 me-2 flex-grow-1">Batal</button>
                         </div>
                     </div>
@@ -216,7 +195,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">${title}</h5>
+                            <h5 class="modal-title">${title}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -236,27 +215,6 @@
         });
        }
 
-       function pesan(id) {
-        $.ajax({
-          type: "POST",
-          url: "/detail_get",
-          data: { id_give:id },
-          success: function (response) {
-            console.log(response)
-          },
-        });
-      }
-
-      function desc(id) {
-        $.ajax({
-          type: "POST",
-          url: "/detail_get",
-          data: { id_give:id },
-          success: function (response) {
-            console.log(response)
-          },
-        });
-      }
 
 
       </script>
@@ -291,10 +249,10 @@
                             <a class="nav-link" href="/produk">Obat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/about">About</a>
+                            <a class="nav-link" href="/about">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/profile/{{ user_info.username }}">Profil</a>
                         </li>
                     </div>
                 </div>

@@ -36,6 +36,8 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="There was problem logging you in"))
 
+    
+
 @app.route("/login", methods=['GET'])
 def login():
     msg = request.args.get('msg')
@@ -142,7 +144,59 @@ def posting():
         })
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for('home'))
+    
+@app.route("/get_order", methods=["GET"])
+def get_order():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        username_receive = request.args.get('username_give')
+        if username_receive == '':
+            posts = list(db.order.find({}).limit(20))
 
+        else:
+            posts = list(db.order.find(
+                {'username': username_receive}).limit(20))
+            
+        for post in posts:
+            post["_id"] = str(post["_id"])
+            
+        return jsonify(
+            {
+                "result": "success",
+                "msg": "Successful fetched all posts",
+                "posts": posts,
+            }
+        )
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+@app.route("/riwayat/<username>", methods=["GET"])
+def riwayat_user(username):
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        status = username == payload.get("id")
+        user_info = db.users.find_one({"username": username}, {"_id": False})
+        if user_info:
+            user_access = user_info.get("access", 0)
+            if user_access == 1:
+                return render_template("riwayat_obat.html", user_info=user_info, status=status)
+            
+            return redirect(url_for("riwayatadmin" , user_info=user_info))
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+@app.route("/riwayatadmin", methods=["GET"])
+def riwayatadmin():
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({'username': payload.get('id')})
+        return render_template("riwayat_obat_admin.html" , user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+    
 
 @app.route("/get_posts", methods=["GET"])
 def get_posts():
@@ -151,11 +205,11 @@ def get_posts():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
         username_receive = request.args.get('username_give')
         if username_receive == '':
-            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+            posts = list(db.posts.find({}).sort("id", -1).limit(20))
 
         else:
             posts = list(db.posts.find(
-                {'username': username_receive}).sort("date", -1).limit(20))
+                {'username': username_receive}).sort("id", -1).limit(20))
         # We should fetch the full list of posts here
 
         for post in posts:
@@ -227,10 +281,26 @@ def update_like():
 
 @app.route('/produk', methods=['GET', 'POST'])
 def produk():
-    if request.method == 'POST':
-        # Handle POST Request here
-        return render_template('pesan_obat.html')
-    return render_template('pesan_obat.html')
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        print("Payload ID:", payload.get('id'))
+        user_info = db.users.find_one({'username': payload.get('id')})
+        if user_info:
+            user_access = user_info.get("access", 0)
+            if user_access == 1:
+                return render_template("pesan_obat.html" , user_info=user_info)
+            
+            return render_template("pesan_obat_admin.html" , user_info=user_info)
+    
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('login'))
+    
+
 
 # @app.route('/pesan', methods=['GET'])
 # def pesan():
@@ -244,16 +314,16 @@ def produk():
 #     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
 #         return redirect(url_for("home"))
 
-@app.route('/detail_get', methods=['POST'])
-def detail_get():
-    token_receive = request.cookies.get(TOKEN_KEY)
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-        user_info = db.users.find_one({"username": payload["id"]})
-        id_receive = request.form.get('id_give')
-        # return render_template("detail.html" , result=result , user_info=user_info)
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
+# @app.route('/detail_get', methods=['POST'])
+# def detail_get():
+#     token_receive = request.cookies.get(TOKEN_KEY)
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+#         user_info = db.users.find_one({"username": payload["id"]})
+#         id_receive = request.form.get('id_give')
+#         # return render_template("detail.html" , result=result , user_info=user_info)
+#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+#         return redirect(url_for("home"))
 
         
 
@@ -263,13 +333,16 @@ def delete():
     db.obat.delete_one(
         {'id' : int(id_receive) }
     )
+    
+    # @app.route("/desc_get", methods=[""])
+    # def func():
 
-@app.route('/produk_admin', methods=['GET', 'POST'])
-def produk_admin():
-    if request.method == 'POST':
-        # Handle POST Request here
-        return render_template('pesan_obat_admin.html')
-    return render_template('pesan_obat_admin.html')
+# @app.route('/produk_admin', methods=['GET', 'POST'])
+# def produk_admin():
+#     if request.method == 'POST':
+#         # Handle POST Request here
+#         return render_template('pesan_obat_admin.html')
+#     return render_template('pesan_obat_admin.html')
 
 @app.route("/produk_admin_upload", methods=['GET'])
 def show_product():
@@ -311,37 +384,40 @@ def order():
         print("Payload ID:", payload.get('id'))
         user_info = db.users.find_one({'username': payload.get('id')})
         title_receive = request.form.get('title_give')
-        cost_receive = request.form.get('cost_give')
-        qty_receive = request.form.get('qty_give')
+        cost_receive = float(request.form.get('cost_give'))
+        qty_receive = int(request.form.get('qty_give'))
         total = cost_receive * qty_receive
         
-        file = request.files['file_give']
-        extension = file.filename.split('.')[-1]
-        filename = f'static/bukti/bukti-{title_receive}.{extension}'
-        file.save(filename)
         count = db.order.count_documents({})
         id= count + 1
         
         doc = {
             'id' : id,
+            'username' : user_info.get("username"),
             'nama_lengkap' : user_info.get("nama"),
             'alamat' : user_info.get("alamat"),
             'HP' : user_info.get("nomorHp"),
-            'file': filename,
             'title': title_receive,
             'qty': qty_receive,
             'total': total,
+            'done': 0
         }
         db.order.insert_one(doc)
         return jsonify({'message' : 'data disimpan'})
     
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
 
 
 @app.route("/about")
 def about():
-    return render_template('about.html')
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload.get("id")})
+        return render_template('about.html', user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 @app.route("/forum")
@@ -409,10 +485,13 @@ def konsultasi():
 
 @app.route('/pesanan', methods=['GET', 'POST'])
 def pesanan():
-    if request.method == 'POST':
-        # Handle POST Request here
-        return render_template('riwayat_obat.html')
-    return render_template('riwayat_obat.html')
+    token_receive = request.cookies.get(TOKEN_KEY)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.users.find_one({"username": payload.get("id")})
+        return render_template('riwayat_obat.html', user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 # @app.route('/detaia', methods=['GET', 'POST'])
