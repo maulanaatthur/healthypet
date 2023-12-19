@@ -172,14 +172,27 @@
                         </div>
                       </div>
                     </div>
+                    <!-- <nav id="btns-me" class="level is-mobile d-flex justify-content-center" style="margin-top: 2rem"></nav>
+                     <button type="button" class="button level-item has-text-centered is-sparta btn btn-warning  gap-2 editButton mb-3" data-bs-toggle="modal"
+          data-bs-target="#modal-post">Edit Profile
+        </button>
+     
+
+    <button type="button" class="btn btn-secondary button level-item has-text-centered is-sparta is-outlined" aria-label="logout" onclick="sign_out()">
+        Sign Out<span class="icon is-small"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+    </button>
+  </nav> -->
+  <div class="text-center mt-3 mb-3">
+    <button type="button" class="btn btn-warning btn-lg editButton" data-bs-toggle="modal" data-bs-target="#modal-post">Edit Profile</button>
+    <button type="button" class="btn btn-secondary btn-lg ml-2" aria-label="logout" onclick="sign_out()">Sign Out<span class="icon is-small"><i class="fa fa-sign-out" aria-hidden="true"></i></span></button>
+</div>
                   </div>
+                  
                 </div>
               </div>
             </div>
           {% if status %}
-          <button type="button" class="btn btn-primary btn-lg gap-2 editButton" data-bs-toggle="modal"
-          data-bs-target="#modal-post">Edit Profile
-        </button>
+         
 
         <div class="modal fade " id="modal-post" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-start">
